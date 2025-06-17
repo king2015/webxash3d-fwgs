@@ -1,4 +1,4 @@
-FROM emscripten/emsdk:4.0.9 AS engine
+FROM emscripten/emsdk:4.0.10 AS engine
 
 RUN dpkg --add-architecture i386
 RUN apt update && apt upgrade -y && apt -y --no-install-recommends install aptitude
@@ -19,7 +19,7 @@ RUN sed -e '/preInit();/{r patches/init.js' -e 'd}' -i build/engine/index.js
 RUN sed -e 's/async type="text\/javascript"/defer type="module"/' -i build/engine/index.html
 
 
-FROM emscripten/emsdk:4.0.9 AS cs
+FROM emscripten/emsdk:4.0.10 AS cs
 
 RUN dpkg --add-architecture i386
 RUN apt update && apt upgrade -y && apt -y --no-install-recommends install aptitude
