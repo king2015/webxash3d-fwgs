@@ -76,6 +76,14 @@ Cannot be supported at this moment (wait for `freevgui`).
 
 # TODO
 
+## Online
+
+Support connection to servers (only xash3d-fwgs dedicated server).
+
+## Async loading
+
+Patch FS to load game files using HTTP requests.
+
 ## Mobile devices
 
 Support mobile devices (currently crashes).
