@@ -7,6 +7,7 @@ Module.dynamicLibraries = [
 	"cl_dlls/menu_emscripten_wasm32.wasm",
 	"dlls/cs_emscripten_wasm32.so",
 	"cl_dlls/client_emscripten_wasm32.wasm",
+	"/rwdir/filesystem_stdio.so",
 ]
 Module.arguments = ['-game', 'cstrike', '+_vgui_menus', '0']
 Module['canvas'] = document.getElementById('canvas')
