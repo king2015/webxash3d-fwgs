@@ -1,26 +1,29 @@
-async function mountZipToFS(zipArrayBuffer) {
-	const zipData = new Uint8Array(zipArrayBuffer);
-	const files = fflate.unzipSync(zipData);
+Module.onRuntimeInitialized = () => {
+    window.Cmd_ExecuteString = Module.cwrap('Cmd_ExecuteString', null, ['string']);
+    window.Sys_Quit = Module.cwrap('Sys_Quit', null, []);
+}
 
-	for (const [filename, content] of Object.entries(files)) {
-		if (content.length === 0) continue; // likely a directory
-		const path = '/xash/' + filename;
-		const dir = path.split('/').slice(0, -1).join('/');
-		await FS.mkdirTree(dir)
-		await FS.writeFile(path, content);
-	}
+async function fsInit() {
+    const res = await fetch('/public/valve.zip')
+    const zip = await JSZip.loadAsync(await res.arrayBuffer());
+    for (const [filename, file] of Object.entries(zip.files)) {
+        if (file.dir) continue;
+
+        const path = '/rodir/' + filename;
+        const dir = path.split('/').slice(0, -1).join('/');
+
+        await FS.mkdirTree(dir);
+        await FS.writeFile(path, await file.async("uint8array"));
+    }
+
+    await FS.chdir('/rodir')
 }
 
 async function start() {
-	await FS.mkdir('/rodir')
-	await FS.mkdir('/xash')
+    await fsInit();
 
-	const res = await fetch('/public/valve.zip')
-	await mountZipToFS(await res.arrayBuffer())
-	await FS.chdir('/xash')
-
-	preInit();
-	run();
+    preInit();
+    run();
 }
 
 start()

@@ -1,12 +1,12 @@
-import * as fflate from 'https://cdn.skypack.dev/fflate@0.8.2?min';
+import JSZip from 'https://cdn.skypack.dev/jszip@3.10.1';
 var Module = typeof Module != 'undefined' ? Module : {};
 Module.dynamicLibraries = [
-	"filesystem_stdio",
-	"ref_gles3compat.so",
-	"ref_soft.so",
-	"menu",
-	"server.wasm",
-	"client.wasm",
+	"filesystem_stdio.wasm",
+	"libref_gles3compat.wasm",
+	"libref_soft.wasm",
+	"cl_dlls/menu_emscripten_wasm32.wasm",
+	"dlls/hl_emscripten_wasm32.so",
+	"cl_dlls/client_emscripten_wasm32.wasm",
 ]
 Module.arguments = []
 Module['canvas'] = document.getElementById('canvas')
