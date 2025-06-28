@@ -17,7 +17,6 @@ FROM emscripten/emsdk:4.0.10 AS cs
 
 WORKDIR /cs
 COPY cs16-client .
-ENV EMCC_CFLAGS="-s USE_SDL=2"
 RUN emcmake cmake -S . -B build && \
 	cmake --build build --config Release
 
