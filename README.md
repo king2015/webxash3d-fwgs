@@ -95,17 +95,14 @@ WebRTC provides near-UDP performance in the browser—typically [2–3 times fas
 
 Support connection to servers (only xash3d-fwgs dedicated server).
 
-## Async loading
-
-Patch FS to load game files using HTTP requests.
-
-## Mobile devices
-
-Support mobile devices (currently crashes).
-
 ## NPM
 
 Fix all issues above and publish `xash3d-fwgs` npm package.
+
+## Async/lazy loading (potentially)
+
+Patch the FS module to load only the currently required game files using `fetch`, instead of loading all files into RAM. 
+Requires `EAGAIN` support from the engine.
 
 ## WebGL improves (potentially)
 
