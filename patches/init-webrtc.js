@@ -87,6 +87,12 @@ async function connect() {
 Module.onRuntimeInitialized = () => {
     window.Cmd_ExecuteString = Module.cwrap('Cmd_ExecuteString', null, ['string']);
     window.Sys_Quit = Module.cwrap('Sys_Quit', null, []);
+    setTimeout(() => {
+        const supportsHover = window.matchMedia('(hover: hover)').matches;
+        if (!supportsHover) {
+            window.Cmd_ExecuteString('touch_enable 1')
+        }
+    }, 5000)
 
     const sendtoCallback = (message, length, flags) => {
         const view = HEAPU8.subarray(message, message + length);

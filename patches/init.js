@@ -1,6 +1,12 @@
 Module.onRuntimeInitialized = () => {
     window.Cmd_ExecuteString = Module.cwrap('Cmd_ExecuteString', null, ['string']);
     window.Sys_Quit = Module.cwrap('Sys_Quit', null, []);
+    setTimeout(() => {
+        const supportsHover = window.matchMedia('(hover: hover)').matches;
+        if (!supportsHover) {
+            window.Cmd_ExecuteString('touch_enable 1')
+        }
+    }, 5000)
 }
 
 async function fsInit() {
