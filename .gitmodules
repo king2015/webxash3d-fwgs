@@ -7,3 +7,12 @@
 [submodule "cs16-client"]
 	path = cs16-client
 	url = https://github.com/yohimik/cs16-client
+[submodule "packages/xash3d/xash3d-fwgs"]
+	path = packages/xash3d/xash3d-fwgs
+	url = https://github.com/yohimik/xash3d-fwgs.git
+[submodule "packages/cs16/cs16-client"]
+	path = packages/cs16/cs16-client
+	url = https://github.com/yohimik/cs16-client.git
+[submodule "packages/hlsdk/hlsdk-portable"]
+	path = packages/hlsdk/hlsdk-portable
+	url = https://github.com/yohimik/hlsdk-portable.git
