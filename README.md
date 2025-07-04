@@ -115,3 +115,4 @@ Support GLES3Compat batching and fix `Vertex buffer is not big enough for the dr
 ## Scripts (potentially)
 
 Some scripts stop working after saving and loading (eg. the guard doesn't open the train door).
+Potentially related to `#define EXPORT __attribute__((visibility("default")))`.
