@@ -99,9 +99,17 @@ Support connection to servers (only xash3d-fwgs dedicated server).
 
 Wrap the Emscripten JavaScript file using TypeScript and add any missing type definitions.
 
+## Engine Touch Support
+
+Enable touch support at the engine level.
+
+## Fix Text Inputs
+
+Text inputs are not rendered as standard HTML input fields, which makes text input impossible on mobile devices.
+
 ## NPM
 
-Fix all issues above and publish `xash3d-fwgs` npm package.
+Publish `xash3d-fwgs` npm package.
 
 ## Async/lazy loading (potentially)
 
