@@ -102,6 +102,7 @@ Wrap the Emscripten JavaScript file using TypeScript and add any missing type de
 ## Engine Touch Support
 
 Enable touch support at the engine level.
+Requires `isNeedTouch` engine function support.
 
 ## Fix Text Inputs
 
