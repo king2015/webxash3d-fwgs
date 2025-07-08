@@ -5,12 +5,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build:wasm": "docker build --progress=plain -t xash3d-builder . && docker run --rm -v \"$(pwd)/lib:/out\" xash3d-builder && ts-node build/index.ts",
-    "build:ts": "tsc -p tsconfig.build.json",
+    "build:wasm": "docker build --progress=plain -t xash3d-builder . && docker run --rm -v \"$(pwd)/dist:/out\" xash3d-builder",
+    "build:ts": "ts-node compile/index.ts && tsc --project tsconfig.build.json",
     "build": "npm run build:wasm && npm run build:ts"
   },
   "files": [
-    "dist"
+    "dist/**/*"
   ],
   "keywords": [
     "typescript",
