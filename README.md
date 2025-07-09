@@ -6,7 +6,7 @@ This project is a [Lerna](https://lerna.js.org)-managed monorepo for running and
 
 * [xash3d-fwgs](packages/xash3d): Core engine build for WebAssembly.
 * [hlsdk-portable](packages/hlsdk): Portable Half-Life SDK game logic.
-* [cs16-client](packages/cs16-client): Counter-Strike 1.6 client build for the web.
+* [cs16-client](packages/cs16): Counter-Strike 1.6 client build for the web.
 
 ## Getting Started 
 
