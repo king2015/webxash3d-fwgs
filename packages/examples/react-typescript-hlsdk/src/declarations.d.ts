@@ -11,3 +11,9 @@ declare module "*.zip" {
     const value: string;
     export default value;
 }
+
+// Allow importing .so files as modules
+declare module "*.so" {
+    const value: string;
+    export default value;
+}

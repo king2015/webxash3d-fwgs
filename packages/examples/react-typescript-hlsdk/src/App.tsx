@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {FC, useRef} from 'react';
 import {Xash3D} from "xash3d-fwgs";
 import filesystemURL from 'xash3d-fwgs/dist/filesystem_stdio.wasm'
 import xashURL from 'xash3d-fwgs/dist/xash.wasm'
@@ -9,23 +9,18 @@ import gles3URL from 'xash3d-fwgs/dist/libref_gles3compat.wasm'
 import './App.css';
 
 
-function App() {
-    const xashRef = useRef<Xash3D>(null)
-
+const App: FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     return (
         <>
-            <button style={{zIndex: '99', position: 'relative'}} onClick={() => {
-                xashRef.current!.run()
-            }}>
-                start
-            </button>
             <input
                 className="Input"
                 type="file"
                 id="folder"
                 multiple
+                // @ts-ignore
+                webkitdirectory={1}
                 onChange={async (e) => {
                     if (!e.target?.files?.length) return
 
@@ -43,18 +38,22 @@ function App() {
                         },
                         onStart: async (fs) => {
                             await Promise.all(Array.from(e.target.files!).map(async f => {
-                                fs.writeFile(`/rodir/${f.webkitRelativePath}`, await f.bytes())
+                                const path = `/rodir/${f.webkitRelativePath}`
+                                const dir = path.split('/').slice(0, -1).join('/');
+                                fs.mkdirTree(dir)
+                                fs.writeFile(path, new Uint8Array(await f.arrayBuffer()))
                             }))
-                            fs.chdir('/rodir')
+                            fs.chdir('/rodir/')
                         },
                         args: ['-windowed']
                     })
+                    x.run()
                 }}
             />
             <label htmlFor="folder">
                 Game folder
             </label>
-            <canvas id="canvas" ref={canvasRef} />
+            <canvas id="canvas" ref={canvasRef}/>
         </>
     );
 }

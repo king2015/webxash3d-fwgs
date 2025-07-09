@@ -1,45 +1,41 @@
-# Xash3D-FWGS Emscripten Web Port
+# Xash3D-FWGS Emscripten Web Ports Monorepo
 
-This project is an [Emscripten](https://emscripten.org/)-based web port of [Xash3D-FWGS](https://github.com/FWGS/xash3d-fwgs), an open-source engine for games based on the GoldSource engine.
+This project is a [Lerna](https://lerna.js.org)-managed monorepo for running and compiling WebAssembly builds of [Xash3D-FWGS](https://github.com/FWGS/xash3d-fwgs), an open-source reimplementation of the GoldSource engine, in the browser using [Emscripten](https://emscripten.org/).
 
-# Compiling and running 
+### Included Packages
 
-## Clone the repository
+* [xash3d-fwgs](packages/xash3d): Core engine build for WebAssembly.
+* [hlsdk-portable](packages/hlsdk): Portable Half-Life SDK game logic.
+* [cs16-client](packages/cs16-client): Counter-Strike 1.6 client build for the web.
 
-```bash
+## Getting Started 
+
+### Clone the repository
+
+```shell
 git clone --recurse-submodules https://github.com/yohimik/webxash3d-fwgs.git
 cd webxash3d-fwgs
 ```
 
-## Game Content
+### Install Dependencies
+
+```shell
+npm install
+npx lerna link
+```
+
+### Game Content
 
 You must provide your own game files (e.g., from Steam):
 ```shell
 steamcmd +force_install_dir ./hl +login your_steam_username +app_update 70 validate +quit
 ```
 
-Zip and and copy the `valve` folder from your Half-Life installation into the `public/valve.zip`.
-Note: zip contents should be like this:
-```shell
-/valve.zip
-├──┬/valve                  
-│  ├───/file1           
-│  └───/file2...  
-└──┬/cstrike                  
-   ├───/file1           
-   └───/file2...  
-```
+### Compile and run
 
-
-## Compile and run
+To build and run a project, go to the [packages/examples/ folder](packages/examples) and choose the example that matches the game or setup you want.
 
 ### hlsdk
-
-```shell
-docker compose -f hlsdk.docker-compose.yml up -d
-```
-
-Navigate in your browser to `http://localhost:8080`
 
 <details>
   <summary>Screenshots (black frames - mac book camera, blue frames - browser active outline)</summary>
@@ -52,13 +48,7 @@ Navigate in your browser to `http://localhost:8080`
 
 </details>
 
-### cs16-client
-
-```shell
-docker compose -f cs16-client.docker-compose.yml up -d
-```
-
-Navigate in your browser to `http://localhost:8081`
+### cs16
 
 <details>
   <summary>Screenshots (black frames - mac book camera, blue frames - browser active outline)</summary>
@@ -79,7 +69,7 @@ Cannot be supported at this moment (wait for `freevgui`).
 WebRTC provides near-UDP performance in the browser—typically [2–3 times faster](https://github.com/yohimik/ws-webrtc-benchmark) than WebSockets.
 
 1. Start by using [the goxash3d-fwgs WebRTC example](https://github.com/yohimik/goxash3d-fwgs/tree/main/examples/webrtc) dedicated server.
-2. In the Dockerfile, replace [init.js](/patches/init.js) with the [init-webrtc.js](/patches/init-webrtc.js) patch.
+2. Check out WebRTC example.
 3. Connect to the server via the multiplayer LAN menu or by using the console command: `connect 127.0.0.1:8080`.
 
 <details>
