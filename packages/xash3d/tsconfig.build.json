@@ -3,8 +3,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "declarationDir": "dist",
+    "emitDeclarationOnly": false
   },
   "include": ["lib"]
 }

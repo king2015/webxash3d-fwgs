@@ -1,12 +1,12 @@
 {
   "name": "xash3d-fwgs",
-  "version": "1.0.0",
+  "version": "0.20.0",
   "description": "Xash3D-FWGS emscripten port",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build:wasm": "docker build --progress=plain -t xash3d-builder . && docker run --rm -v \"$(pwd)/dist:/out\" xash3d-builder",
-    "build:ts": "ts-node compile/index.ts && tsc --project tsconfig.build.json",
+    "build:ts": "node --loader ts-node/esm scripts/index.mts && tsc -p tsconfig.build.json",
     "build": "npm run build:wasm && npm run build:ts"
   },
   "files": [
@@ -20,9 +20,7 @@
   "author": "yohimik",
   "license": "MIT",
   "devDependencies": {
-    "@types/mustache": "^4.2.6",
     "@types/node": "^22.15.34",
-    "mustache": "^4.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

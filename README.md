@@ -95,10 +95,6 @@ WebRTC provides near-UDP performance in the browser—typically [2–3 times fas
 
 Support connection to servers (only xash3d-fwgs dedicated server).
 
-## TypeScript
-
-Wrap the Emscripten JavaScript file using TypeScript and add any missing type definitions.
-
 ## Engine Touch Support
 
 Enable touch support at the engine level.
