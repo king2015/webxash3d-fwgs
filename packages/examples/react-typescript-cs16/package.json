@@ -1,5 +1,5 @@
 {
-  "name": "react-typescript-hlsdk",
+  "name": "react-typescript-cs16",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,7 +10,8 @@
     "react-dom": "19.1.0",
     "react-scripts": "5.0.1",
     "typescript": "4.9.5",
-    "hlsdk-portable": "1.0.0",
+    "jszip": "3.10.1",
+    "cs16-client": "1.0.0",
     "xash3d-fwgs": "0.20.0"
   },
   "devDependencies": {

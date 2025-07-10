@@ -122,7 +122,7 @@ export class Xash3D {
         }
     }
 
-    exit() {
+    quit() {
         if (this.exited || !this.running) return
         this.exited = true;
         this.running = false;
