@@ -7,7 +7,8 @@ const x = new Xash3D({
     canvas: document.getElementById('canvas'),
     args: ['-game', 'cstrike'],
 })
-await x.run()
+await x.init()
+x.main()
 x.Cmd_ExecuteString('map de_dust2')
 x.Cmd_ExecuteString('sv_cheats 1')
 x.Cmd_ExecuteString('noclip')
