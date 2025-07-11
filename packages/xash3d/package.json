@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build:wasm": "docker build --progress=plain -t xash3d-builder . && docker run --rm -v \"$(pwd)/dist:/out\" xash3d-builder",
-    "build:ts": "node --loader ts-node/esm scripts/index.mts && tsc -p tsconfig.build.json",
+    "build:ts": "node --loader ts-node/esm scripts/patch-emscripten-js.mts && tsc -p tsconfig.build.json",
     "build": "npm run build:wasm && npm run build:ts"
   },
   "files": [

@@ -8,7 +8,6 @@ import serverURL from 'hlsdk-portable/dist/dlls/hl_emscripten_wasm32.so'
 import gles3URL from 'xash3d-fwgs/dist/libref_gles3compat.wasm'
 import './App.css';
 
-
 const App: FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -36,18 +35,17 @@ const App: FC = () => {
                                 gles3compat: gles3URL,
                             }
                         },
-                        onStart: async (fs) => {
-                            await Promise.all(Array.from(e.target.files!).map(async f => {
-                                const path = `/rodir/${f.webkitRelativePath}`
-                                const dir = path.split('/').slice(0, -1).join('/');
-                                fs.mkdirTree(dir)
-                                fs.writeFile(path, new Uint8Array(await f.arrayBuffer()))
-                            }))
-                            fs.chdir('/rodir/')
-                        },
                         args: ['-windowed']
                     })
-                    x.run()
+                    await x.init()
+                    await Promise.all(Array.from(e.target.files!).map(async f => {
+                        const path = `/rodir/${f.webkitRelativePath}`
+                        const dir = path.split('/').slice(0, -1).join('/');
+                        x.FS.mkdirTree(dir)
+                        x.FS.writeFile(path, new Uint8Array(await f.arrayBuffer()))
+                    }))
+                    x.FS.chdir('/rodir/')
+                    x.main()
                 }}
             />
             <label htmlFor="folder">

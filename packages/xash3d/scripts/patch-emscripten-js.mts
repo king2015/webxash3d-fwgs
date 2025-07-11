@@ -19,8 +19,8 @@ class CompileFile {
 
     save() {
         return Promise.all([
-            fs.writeFile('./lib/raw.js', this.raw),
-            fs.writeFile('./lib/xash.js', this.data),
+            fs.writeFile('./lib/generated/raw.js', this.raw),
+            fs.writeFile('./lib/generated/xash.js', this.data),
         ])
     }
 }
@@ -39,7 +39,8 @@ async function main() {
   define([], () => Xash3D);`, 'export default Xash3D;')
 
     // add on start async FS callback
-    f.replaceAll('preInit();', 'if (moduleArg?.onStart) await moduleArg.onStart(FS); preInit();')
+    f.deleteAll('preInit();')
+    f.deleteAll('run();')
 
     // replace filenames to custom paths
     f.replaceAll('filename = PATH.normalize(filename);', 'filename = PATH.normalize(filename); filename = moduleArg?.filesMap?.[filename] ?? filename;')
@@ -47,12 +48,12 @@ async function main() {
     // return engine funcs instead of runtime promise
     f.replaceAll('return moduleRtn;', `
         return {
-            Cmd_ExecuteString: (cmd) => Module.ccall(
-                'Cmd_ExecuteString',
-                null,      
-                ['string'],
-                [cmd]
-            ),
+            Module,
+            FS,
+            start: () => {
+                preInit();
+                run();
+            },
         };
     `)
 
