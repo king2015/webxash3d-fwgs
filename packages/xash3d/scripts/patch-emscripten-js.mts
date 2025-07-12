@@ -50,6 +50,12 @@ async function main() {
         return {
             Module,
             FS,
+            HEAP32,
+            HEAP16,
+            HEAP8,
+            HEAPU8,
+            addFunction,
+            removeFunction,
             start: () => {
                 preInit();
                 run();

@@ -17,9 +17,5 @@ module.exports = function override(config) {
         test: /\.so$/,
         type: 'asset/resource', // This will emit the file and return the URL
     });
-    config.module.rules.push({
-        test: /\.zip/,
-        type: 'asset/resource', // This will emit the file and return the URL
-    });
     return config;
 };

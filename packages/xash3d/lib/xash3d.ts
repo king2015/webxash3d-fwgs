@@ -1,4 +1,5 @@
-import Xash, {Module, FS, EngineFuncs} from './generated/xash'
+import Xash, {Em} from './generated/xash'
+import {Net} from "./net";
 import {
     DEFAULT_CLIENT_LIBRARY,
     DEFAULT_SOFT_LIBRARY,
@@ -38,6 +39,8 @@ export type Xash3DOptions = {
 export class Xash3D {
     opts?: Xash3DOptions
 
+    net?: Net
+
     private _exited = false
     public get exited() {
         return this._exited;
@@ -57,11 +60,9 @@ export class Xash3D {
         this._running = value;
     }
 
+    em?: Em
 
-    Module?: Module
-    FS?: FS
-    private start?: () => void
-    private initPromise?: Promise<EngineFuncs>
+    private initPromise?: Promise<Em>
 
     constructor(opts: Xash3DOptions = {}) {
         this.opts = opts;
@@ -96,7 +97,7 @@ export class Xash3D {
     }
 
     Cmd_ExecuteString(cmd: string) {
-        this.Module?.ccall(
+        this.em?.Module?.ccall(
             'Cmd_ExecuteString',
             null,
             ['string'],
@@ -134,20 +135,20 @@ export class Xash3D {
                 onRuntimeInitialized: this?.opts?.onRuntimeInitialized
             })
         }
-        const {FS, Module, start} = await this.initPromise
+        this.em = await this.initPromise
         if (this.exited) {
             this.Sys_Quit()
             return
         }
-        this.FS = FS
-        this.Module = Module
-        this.start = start
+        if (this.net) {
+            this.net.init(this.em)
+        }
     }
 
     main() {
-        if (!this.start || this.running || this.exited) return
+        if (!this.em || this.running || this.exited) return
         this.running = true
-        this.start()
+        this.em.start()
     }
 
     quit() {

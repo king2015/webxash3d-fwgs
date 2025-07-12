@@ -41,10 +41,10 @@ const App: FC = () => {
                     await Promise.all(Array.from(e.target.files!).map(async f => {
                         const path = `/rodir/${f.webkitRelativePath}`
                         const dir = path.split('/').slice(0, -1).join('/');
-                        x.FS.mkdirTree(dir)
-                        x.FS.writeFile(path, new Uint8Array(await f.arrayBuffer()))
+                        x.em.FS.mkdirTree(dir)
+                        x.em.FS.writeFile(path, new Uint8Array(await f.arrayBuffer()))
                     }))
-                    x.FS.chdir('/rodir/')
+                    x.em.FS.chdir('/rodir/')
                     x.main()
                 }}
             />

@@ -50,11 +50,11 @@ const App: FC = () => {
                     const path = '/rodir/' + filename;
                     const dir = path.split('/').slice(0, -1).join('/');
 
-                    x.FS.mkdirTree(dir);
-                    x.FS.writeFile(path, await file.async("uint8array"));
+                    x.em.FS.mkdirTree(dir);
+                    x.em.FS.writeFile(path, await file.async("uint8array"));
                 }))
 
-                x.FS.chdir('/rodir')
+                x.em.FS.chdir('/rodir')
                 x.main()
             }}>
                 Start
