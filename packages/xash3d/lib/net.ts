@@ -16,7 +16,7 @@ export class Net {
 
     em?: Em
 
-    init(em: Em) {
+    run(em: Em) {
         if (this.em) return
 
         this.em = em
@@ -41,11 +41,16 @@ export class Net {
             return
         }
         const callback = (message: number, length: number, flags: number) => {
-            const view = this?.em?.HEAPU8?.subarray(message, message + length);
-            if (!view) return
-            cb({
-                data: view,
-            })
+            const em = this.em;
+            if (!em) return;
+
+            const heap = em.HEAPU8;
+            const end = message + length;
+
+            if (!heap || length <= 0 || message < 0 || end > heap.length) return;
+
+            const view = heap.subarray(message, end);
+            cb({ data: view });
         }
         this.clearSendtoCallback()
         this.sendtoPointer = this.em.addFunction(callback, 'viii')
@@ -62,26 +67,31 @@ export class Net {
     private registerRecvfromCallback() {
         if (!this.em || this.recvfromPointer) return
         const recvfromCallback = (sockfd: number, buf: number, len: number, flags: number, src_addr: number, addrlen: number) => {
-            const packet = this.incoming.dequeue()
-            if (!packet) {
-                return -1
+            const packet = this.incoming.dequeue();
+            if (!packet) return -1;
+
+            const em = this.em!;
+            const data = packet.data instanceof Uint8Array ? packet.data : new Uint8Array(packet.data);
+            const copyLen = Math.min(len, data.length);
+            if (copyLen > 0) {
+                em.HEAPU8.set(data.subarray(0, copyLen), buf);
             }
-            const dataView = new Uint8Array(packet.data);
-            const copyLen = Math.min(len, dataView.length);
-            this.em!.HEAPU8.set(dataView.subarray(0, copyLen), buf);
 
             if (src_addr) {
-                this.em!.HEAP16[src_addr >> 1] = 2;
-                this.em!.HEAP8[(src_addr + 2)] = 0x1F;
-                this.em!.HEAP8[(src_addr + 3)] = 0x90;
-                this.em!.HEAP8[(src_addr + 4)] = 127;
-                this.em!.HEAP8[(src_addr + 5)] = 0;
-                this.em!.HEAP8[(src_addr + 6)] = 0;
-                this.em!.HEAP8[(src_addr + 7)] = 1;
+                const base8 = src_addr;
+                const base16 = src_addr >> 1;
+                const heap8 = em.HEAP8;
+                em.HEAP16[base16] = 2;
+                heap8[base8 + 2] = 0x1F;
+                heap8[base8 + 3] = 0x90;
+                heap8[base8 + 4] = 127;
+                heap8[base8 + 5] = 0;
+                heap8[base8 + 6] = 0;
+                heap8[base8 + 7] = 1;
             }
 
             if (addrlen) {
-                this.em!.HEAP32[addrlen >> 2] = 16;
+                em.HEAP32[addrlen >> 2] = 16;
             }
 
             return copyLen;

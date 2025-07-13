@@ -80,12 +80,6 @@ Cannot be supported at this moment (wait for `freevgui`).
 
 ### WebRTC Online Mod
 
-WebRTC provides near-UDP performance in the browser—typically [2–3 times faster](https://github.com/yohimik/ws-webrtc-benchmark) than WebSockets.
-
-1. Start by using [the goxash3d-fwgs WebRTC example](https://github.com/yohimik/goxash3d-fwgs/tree/main/examples/webrtc) dedicated server.
-2. Check out WebRTC example.
-3. Connect to the server via the multiplayer LAN menu or by using the console command: `connect 127.0.0.1:8080`.
-
 <details>
   <summary>Screenshots</summary>
 

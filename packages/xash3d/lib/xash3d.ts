@@ -140,15 +140,15 @@ export class Xash3D {
             this.Sys_Quit()
             return
         }
-        if (this.net) {
-            this.net.init(this.em)
-        }
     }
 
     main() {
         if (!this.em || this.running || this.exited) return
         this.running = true
         this.em.start()
+        if (this.net) {
+            this.net.run(this.em)
+        }
     }
 
     quit() {
