@@ -22,8 +22,6 @@ This project enables seamless integration of the engine into modern web and cros
 To get started quickly, check out the [examples/](https://github.com/yohimik/webxash3d-fwgs/tree/main/packages/examples) folder for real-world usage with:
 
 * WebRTC transport
-* WebSocket transport
-* File system overrides
+* File system mount
 * Minimal startup with in-memory assets
 * Multiplayer setup demo
-* Each example includes a small setup script, build instructions, and README for clarity.

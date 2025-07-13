@@ -1,6 +1,6 @@
 {
   "name": "cs16-client",
-  "version": "1.0.0",
+  "version": "0.0.0-2b19d69",
   "description": "cs16-client emscripten port",
   "scripts": {
     "build:wasm": "docker build --progress=plain -t cs-builder . && docker run --rm -v \"$(pwd)/dist:/out\" cs-builder",

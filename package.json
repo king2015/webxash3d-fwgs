@@ -1,12 +1,17 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "update-versions": "ts-node ./scripts/version.ts"
+  },
   "workspaces": [
     "packages/*",
     "packages/examples/*"
   ],
-  "dependencies": {},
   "devDependencies": {
-    "lerna": "^8.2.3"
+    "@types/node": "^24.0.13",
+    "ts-node": "^10.9.2",
+    "lerna": "^8.2.3",
+    "typescript": "^5.8.3"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "hlsdk-portable",
-  "version": "1.0.0",
+  "version": "0.0.0-ae2a7fd",
   "description": "HLSDK emscripten port",
   "scripts": {
     "build:wasm": "docker build --progress=plain -t hlsdk-builder . && docker run --rm -v \"$(pwd)/dist:/out\" hlsdk-builder",

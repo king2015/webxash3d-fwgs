@@ -1,6 +1,6 @@
 {
   "name": "xash3d-fwgs",
-  "version": "0.20.0",
+  "version": "0.0.0-4e23012",
   "description": "Xash3D-FWGS emscripten port",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
