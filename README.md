@@ -102,9 +102,9 @@ Requires `isNeedTouch` engine function support.
 
 Text inputs are not rendered as standard HTML input fields, which makes text input impossible on mobile devices.
 
-## NPM
+## GitHub Actions
 
-Publish `xash3d-fwgs` npm package.
+Support GitHub Actions packages publish.
 
 ## Async/lazy loading (potentially)
 
