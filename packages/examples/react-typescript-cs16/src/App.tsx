@@ -56,6 +56,7 @@ const App: FC = () => {
 
                 x.em.FS.chdir('/rodir')
                 x.main()
+                x.Cmd_ExecuteString('_vgui_menus 0')
             }}>
                 Start
             </button>
