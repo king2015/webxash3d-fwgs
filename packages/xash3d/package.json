@@ -2,6 +2,7 @@
   "name": "xash3d-fwgs",
   "version": "0.0.0-4e23012",
   "description": "Xash3D-FWGS emscripten port",
+  "homepage": "https://github.com/yohimik/webxash3d-fwgs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -12,10 +13,33 @@
   "files": [
     "dist/**/*"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yohimik/webxash3d-fwgs.git"
+  },
   "keywords": [
+    "xash3d",
+    "xash3d-fwgs",
+    "goldsrc",
+    "half-life",
+    "game-engine",
+    "wasm",
+    "emscripten",
+    "webassembly",
     "typescript",
-    "utils",
-    "library"
+    "port",
+    "engine-port",
+    "browser-game",
+    "modding",
+    "fps-engine",
+    "retro-gaming",
+    "open-source-game-engine"
   ],
   "author": "yohimik",
   "license": "MIT",

@@ -2,6 +2,7 @@
   "name": "cs16-client",
   "version": "0.0.0-2b19d69",
   "description": "cs16-client emscripten port",
+  "homepage": "https://github.com/yohimik/webxash3d-fwgs",
   "scripts": {
     "build:wasm": "docker build --progress=plain -t cs-builder . && docker run --rm -v \"$(pwd)/dist:/out\" cs-builder",
     "build": "npm run build:wasm"
@@ -10,8 +11,25 @@
     "dist/**/*"
   ],
   "keywords": [
-    "utils",
-    "library"
+    "cs16-client",
+    "counter-strike",
+    "cs1.6",
+    "xash3d",
+    "xash3d-fwgs",
+    "goldsrc",
+    "half-life",
+    "fps",
+    "webassembly",
+    "wasm",
+    "emscripten",
+    "browser-game",
+    "multiplayer",
+    "game-client",
+    "retro-gaming",
+    "open-source-game",
+    "portable-game-client",
+    "web-port",
+    "modding"
   ],
   "author": "yohimik",
   "license": "MIT"

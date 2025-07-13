@@ -2,6 +2,7 @@
   "name": "hlsdk-portable",
   "version": "0.0.0-ae2a7fd",
   "description": "HLSDK emscripten port",
+  "homepage": "https://github.com/yohimik/webxash3d-fwgs",
   "scripts": {
     "build:wasm": "docker build --progress=plain -t hlsdk-builder . && docker run --rm -v \"$(pwd)/dist:/out\" hlsdk-builder",
     "build": "npm run build:wasm"
@@ -10,9 +11,30 @@
     "dist/**/*"
   ],
   "keywords": [
-    "utils",
-    "library"
+    "hlsdk",
+    "half-life",
+    "xash3d-fwgs",
+    "xash3d",
+    "goldsrc",
+    "game-sdk",
+    "modding",
+    "webassembly",
+    "wasm",
+    "emscripten",
+    "browser-game",
+    "portable-sdk",
+    "c-cpp",
+    "fps-engine",
+    "open-source",
+    "retro-gaming",
+    "web-port",
+    "hl-mod",
+    "game-development"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yohimik/webxash3d-fwgs.git"
+  },
   "author": "yohimik",
   "license": "MIT"
 }
