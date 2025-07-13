@@ -7,8 +7,8 @@ RUN emconfigure ./waf configure --emscripten && \
 	emmake ./waf build
 
 RUN mkdir out
-RUN mkdir out/cl_dlls
-RUN mv build/3rdparty/mainui/libmenu.wasm out/cl_dlls/menu_emscripten_wasm32.wasm
+RUN mkdir out/cl_dll
+RUN mv build/3rdparty/mainui/libmenu.wasm out/cl_dll/menu_emscripten_wasm32.wasm
 RUN mv build/engine/xash.js out/raw.js
 RUN mv build/engine/xash.wasm out/xash.wasm
 RUN mv build/filesystem/filesystem_stdio.wasm out/filesystem_stdio.wasm

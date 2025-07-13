@@ -1,11 +1,11 @@
 import React, {FC, useRef} from 'react';
 import {Xash3D} from "xash3d-fwgs";
-import filesystemURL from 'xash3d-fwgs/dist/filesystem_stdio.wasm'
-import xashURL from 'xash3d-fwgs/dist/xash.wasm'
-import menuURL from 'cs16-client/dist/cl_dlls/menu_emscripten_wasm32.wasm'
-import clientURL from 'cs16-client/dist/cl_dlls/client_emscripten_wasm32.wasm'
-import serverURL from 'cs16-client/dist/dlls/cs_emscripten_wasm32.so'
-import gles3URL from 'xash3d-fwgs/dist/libref_gles3compat.wasm'
+import filesystemURL from 'xash3d-fwgs/filesystem_stdio.wasm'
+import xashURL from 'xash3d-fwgs/xash.wasm'
+import menuURL from 'cs16-client/cl_dll/menu_emscripten_wasm32.wasm'
+import clientURL from 'cs16-client/cl_dll/client_emscripten_wasm32.wasm'
+import serverURL from 'cs16-client/dlls/cs_emscripten_wasm32.so'
+import gles3URL from 'xash3d-fwgs/libref_gles3compat.wasm'
 import {loadAsync} from 'jszip'
 import './App.css';
 
