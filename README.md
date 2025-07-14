@@ -2,7 +2,13 @@
 
 This project is a [Lerna](https://lerna.js.org)-managed monorepo for running and compiling WebAssembly builds of [Xash3D-FWGS](https://github.com/FWGS/xash3d-fwgs), an open-source reimplementation of the GoldSource engine, in the browser using [Emscripten](https://emscripten.org/).
 
+```shell
+npm install xash3d-fwgs hlsdk-portable cs16-client
+```
+
 ```typescript
+import { Xash3D } from "xash3d-fwgs"
+
 const x = new Xash3D({
     canvas: document.getElementById('canvas'),
     args: ['-game', 'cstrike'],
