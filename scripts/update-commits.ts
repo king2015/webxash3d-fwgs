@@ -59,8 +59,10 @@ async function updatePackageVersion(pkgPath: string, hash: string): Promise<void
         const data = await fs.readFile(pkgJsonPath, 'utf-8');
         const pkg: PackageJson = JSON.parse(data);
 
-        const baseVersion = pkg.version.split('-')[0];
-        const newVersion = `${baseVersion}-${hash}`;
+        const dashSplit = pkg.version.split('-')
+        const split = dashSplit.length > 1 ? dashSplit : pkg.version.split('+')
+        const baseVersion = split[0];
+        const newVersion = `${baseVersion}+commit.${hash}`;
 
         pkg.version = newVersion;
 

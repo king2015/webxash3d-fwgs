@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "update-versions": "ts-node ./scripts/version.ts"
+    "update-commits": "ts-node scripts/update-commits.ts"
   },
   "workspaces": [
     "packages/*",
