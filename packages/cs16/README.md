@@ -7,7 +7,7 @@
 This package provides **precompiled CS16-Client binaries** compiled to **WASM** using **Emscripten**, enabling **Counter-Strike 1.6 mod support in the browser** via [Xash3D-FWGS Web ports](https://github.com/yohimik/webxash3d-fwgs).
 
 No additional libraries, packages, or native dependencies are required—just a modern web browser.
-This enables seamless deployment of mods directly on the web, making HL modding and gameplay more accessible and portable than ever before.
+This enables seamless deployment of mods directly on the web, making CS modding and gameplay more accessible and portable than ever before.
 
 ---
 
