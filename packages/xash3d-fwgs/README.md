@@ -1,7 +1,7 @@
 # Xash3D-FWGS Emscripten TypeScript
 
 A powerful TypeScript wrapper and extension layer for the [Xash3D FWGS](https://github.com/FWGS/xash3d-fwgs) engine compiled with Emscripten. 
-This project enables seamless integration of the engine into modern web and cross-platform environments with **zero dependencies**, **network protocol abstraction**, and **WebRTC-ready transport support**.
+This project enables seamless integration of the engine into modern web and cross-platform environments with **zero dependencies**, **network protocol abstraction**, and **JavaScript bindings for direct engine console script execution**.
 
 ---
 

@@ -108,10 +108,6 @@ Requires `isNeedTouch` engine function support.
 
 Text inputs are not rendered as standard HTML input fields, which makes text input impossible on mobile devices.
 
-## GitHub Actions
-
-Support GitHub Actions packages publish.
-
 ## Async/lazy loading (potentially)
 
 Patch the FS module to load only the currently required game files using `fetch`, instead of loading all files into RAM. 
