@@ -17,7 +17,7 @@ const App: FC = () => {
             <button onClick={async () => {
                 const x = new Xash3D({
                     canvas: canvasRef.current!,
-                    args: ['-windowed', '-game', 'cstrike', '+_vgui_menus', '0'],
+                    args: ['-windowed', '-game', 'cstrike'],
                     libraries: {
                         filesystem: filesystemURL,
                         xash: xashURL,
