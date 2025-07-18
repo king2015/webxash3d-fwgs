@@ -41,7 +41,6 @@ cd webxash3d-fwgs
 
 ```shell
 npm install
-npx lerna link
 ```
 
 ### Game Content
