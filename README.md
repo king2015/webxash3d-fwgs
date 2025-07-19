@@ -94,6 +94,10 @@ Cannot be supported at this moment (wait for `freevgui`).
 
 # TODO
 
+## Bundle optimization
+
+Reduce the final bundle size by minifying code, compressing assets, and removing unused parts of the engine or SDKs.
+
 ## Online
 
 Support connection to servers (only xash3d-fwgs dedicated server).
