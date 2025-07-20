@@ -37,7 +37,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Docker image for package
-        run: cd /packages/${{ steps.parse_tag.outputs.package }} && npm run build
+        run: cd packages/${{ steps.parse_tag.outputs.package }} && npm run build
 
       - name: Publish NPM package
         run: npm publish --access public
