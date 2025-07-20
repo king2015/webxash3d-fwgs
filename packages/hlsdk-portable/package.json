@@ -1,6 +1,6 @@
 {
   "name": "hlsdk-portable",
-  "version": "0.0.1+commit.c1b79b2",
+  "version": "0.0.2+commit.343b09b",
   "description": "HLSDK emscripten port",
   "homepage": "https://github.com/yohimik/webxash3d-fwgs",
   "scripts": {
