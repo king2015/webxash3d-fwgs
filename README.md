@@ -24,9 +24,9 @@ x.quit()
 
 ### Included Packages
 
-* [xash3d-fwgs](packages/xash3d): Core engine build for WebAssembly.
-* [hlsdk-portable](packages/hlsdk): Portable Half-Life SDK game logic.
-* [cs16-client](packages/cs16): Counter-Strike 1.6 client build for the web.
+* [xash3d-fwgs](packages/xash3d-fwgs): Core engine build for WebAssembly.
+* [hlsdk-portable](packages/hlsdk-portable): Portable Half-Life SDK game logic.
+* [cs16-client](packages/cs16-client): Counter-Strike 1.6 client build for the web.
 
 ## Getting Started 
 
