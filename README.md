@@ -19,7 +19,7 @@ x.Cmd_ExecuteString('map de_dust2')
 x.Cmd_ExecuteString('sv_cheats 1')
 x.Cmd_ExecuteString('noclip')
 x.Cmd_ExecuteString('kill')
-x.Cmd_ExecuteString('quit')
+x.quit()
 ```
 
 ### Included Packages

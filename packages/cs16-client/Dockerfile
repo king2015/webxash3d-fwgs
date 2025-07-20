@@ -1,4 +1,4 @@
-FROM emscripten/emsdk:4.0.10
+FROM emscripten/emsdk:4.0.11
 
 WORKDIR /cs
 COPY cs16-client .

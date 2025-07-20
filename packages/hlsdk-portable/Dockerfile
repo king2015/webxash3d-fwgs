@@ -1,4 +1,4 @@
-FROM emscripten/emsdk:4.0.10
+FROM emscripten/emsdk:4.0.11
 
 WORKDIR /hlsdk-portable
 COPY hlsdk-portable .

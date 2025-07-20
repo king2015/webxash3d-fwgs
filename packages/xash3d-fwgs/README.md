@@ -25,3 +25,26 @@ To get started quickly, check out the [examples/](https://github.com/yohimik/web
 * File system mount
 * Minimal startup with in-memory assets
 * Multiplayer setup demo
+
+```typescript
+import { Xash3D } from "xash3d-fwgs"
+
+const x = new Xash3D({
+    canvas: document.getElementById('canvas'),
+    args: ['-game', 'cstrike'],
+})
+await x.init()
+x.main()
+x.Cmd_ExecuteString('map de_dust2')
+x.Cmd_ExecuteString('sv_cheats 1')
+x.Cmd_ExecuteString('noclip')
+x.Cmd_ExecuteString('kill')
+x.quit()
+```
+
+## 📦 SDKs
+
+The following SDKs are available to run specific mods or games:
+
+* [hlsdk-portable](https://www.npmjs.com/package/hlsdk-portable): Run Half-Life and compatible mods.
+* [cs16-client](https://www.npmjs.com/package/cs16-client): Run Counter-Strike 1.6 and its based mods.

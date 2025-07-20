@@ -28,7 +28,7 @@ export class Net {
         }
     }
 
-    clearCallback(name: string, pointer?: number) {
+    private clearCallback(name: string, pointer?: number) {
         if (!pointer || !this.em) return false
         this.em.Module.ccall(name, null, ['number'], [0]);
         this.em.removeFunction(pointer)

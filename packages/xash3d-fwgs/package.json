@@ -18,7 +18,7 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./raw.js": "./dist/generated/raw.js",
+    "./raw.js": "./dist/raw.js",
     "./filesystem_stdio.wasm": "./dist/filesystem_stdio.wasm",
     "./libref_gles3compat.wasm": "./dist/libref_gles3compat.wasm",
     "./libref_soft.wasm": "./dist/libref_soft.wasm",
