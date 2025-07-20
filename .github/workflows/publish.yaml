@@ -40,6 +40,6 @@ jobs:
         run: cd packages/${{ steps.parse_tag.outputs.package }} && npm run build
 
       - name: Publish NPM package
-        run: npm publish --access public
+        run: cd packages/${{ steps.parse_tag.outputs.package }} && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
