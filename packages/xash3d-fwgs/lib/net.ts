@@ -54,11 +54,11 @@ export class Net {
         }
         this.clearSendtoCallback()
         this.sendtoPointer = this.em.addFunction(callback, 'viii')
-        this.em.Module.ccall('retgister_sendto_callback', null, ['number'], [this.sendtoPointer]);
+        this.em.Module.ccall('register_sendto_callback', null, ['number'], [this.sendtoPointer]);
     }
 
     clearSendtoCallback() {
-        if (this.clearCallback('retgister_sendto_callback', this.sendtoPointer)) {
+        if (this.clearCallback('register_sendto_callback', this.sendtoPointer)) {
             this.sendtoPointer = undefined
         }
         this.sendtoCb = undefined
@@ -97,11 +97,11 @@ export class Net {
             return copyLen;
         }
         this.recvfromPointer = this.em.addFunction(recvfromCallback, 'iiiiiii')
-        this.em.Module.ccall('retgister_recvfrom_callback', null, ['number'], [this.recvfromPointer]);
+        this.em.Module.ccall('register_recvfrom_callback', null, ['number'], [this.recvfromPointer]);
     }
 
     clearRecvfromCallback() {
-        if (this.clearCallback('retgister_recvfrom_callback', this.recvfromPointer)) {
+        if (this.clearCallback('register_recvfrom_callback', this.recvfromPointer)) {
             this.recvfromPointer = undefined
         }
     }

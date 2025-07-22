@@ -32,6 +32,9 @@ async function main() {
     f.deleteAll('preInit();')
     f.deleteAll('run();')
 
+    // fix import paths
+    f.replaceAll('scriptDirectory+path', 'path')
+
     // replace filenames to custom paths
     f.replaceAll('filename=PATH.normalize(filename);', 'filename=PATH.normalize(filename);filename=moduleArg?.filesMap?.[filename] ?? filename;')
 

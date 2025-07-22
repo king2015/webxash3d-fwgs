@@ -3,12 +3,6 @@
  */
 module.exports = function override(config) {
     config.resolve = config.resolve || {};
-    config.resolve.fallback = {
-        ...(config.resolve.fallback || {}),
-        fs: false,
-        child_process: false,
-        crypto: false,
-    };
     config.module.rules.push({
         test: /\.wasm$/,
         type: 'asset/resource', // This will emit the file and return the URL
