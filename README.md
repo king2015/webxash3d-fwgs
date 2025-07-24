@@ -1,4 +1,4 @@
-# Xash3D-FWGS Emscripten Web Ports Monorepo
+# Xash3D-FWGS Emscripten Web Ports Monorepo <img alt="WebXash3D icon" align="right" width="128" height="128" src="./screenshots/logo.png" />
 
 This project is a [Lerna](https://lerna.js.org)-managed monorepo for running and compiling WebAssembly builds of [Xash3D-FWGS](https://github.com/FWGS/xash3d-fwgs), an open-source reimplementation of the GoldSource engine, in the browser using [Emscripten](https://emscripten.org/).
 
