@@ -17,6 +17,13 @@ This project enables seamless integration of the engine into modern web and cros
 
 ---
 
+## Discord Community
+
+Need help? Want to share your project or ideas?
+**[Join our Discord community](https://discord.gg/cRNGjWfTDd)** to connect with others!
+
+---
+
 ## 🧩 Usage
 
 To get started quickly, check out the [examples/](https://github.com/yohimik/webxash3d-fwgs/tree/main/packages/examples) folder for real-world usage with:

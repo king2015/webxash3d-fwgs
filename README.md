@@ -92,6 +92,11 @@ Cannot be supported at this moment (wait for `freevgui`).
 
 </details>
 
+## Discord Community
+
+Need help? Want to share your project or ideas?
+**[Join our Discord community](https://discord.gg/cRNGjWfTDd)** to connect with others!
+
 # TODO
 
 ## Bundle optimization

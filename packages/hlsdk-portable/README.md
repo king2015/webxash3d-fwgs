@@ -20,6 +20,13 @@ Designed for use with [Xash3D-FWGS Web ports](https://github.com/yohimik/webxash
 
 ---
 
+## Discord Community
+
+Need help? Want to share your project or ideas?
+**[Join our Discord community](https://discord.gg/cRNGjWfTDd)** to connect with others!
+
+---
+
 ## 🧩 Usage
 
 To get started quickly, check out the [examples/](https://github.com/yohimik/webxash3d-fwgs/tree/main/packages/examples) folder for real-world usage with:
