@@ -2,6 +2,8 @@
 
 > Emscripten-compiled WebAssembly (WASM) binaries of the [CS16-Client](https://github.com/Velaron/cs16-client), targeting [Xash3D-FWGS](https://github.com/FWGS/xash3d-fwgs), with zero external dependencies.
 
+[![Join our Discord](https://img.shields.io/discord/1397890383605927967?color=5865F2&label=Discord&logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/cRNGjWfTDd)
+
 ## 🚀 Project Overview
 
 This package provides **precompiled CS 1.6 binaries** compiled to **WASM** via **Emscripten**, specifically targeting the [Xash3D-FWGS](https://github.com/FWGS/xash3d-fwgs).
