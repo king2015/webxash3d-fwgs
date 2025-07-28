@@ -12,13 +12,12 @@ export class Xash3DWebRTC extends Xash3D {
         this.net.registerSendtoCallback((p) => this.sendtoCallback(p))
     }
 
-    async init(){
+    async init() {
         await Promise.all([
             super.init(),
             this.connect()
         ]);
     }
-
 
     initConnection(stream: MediaStream) {
         if (this.peer) return
@@ -36,20 +35,28 @@ export class Xash3DWebRTC extends Xash3D {
         stream?.getTracks()?.forEach(t => {
             this.peer!.addTrack(t, stream)
         })
+        let channelsCount = 0
         this.peer.ondatachannel = (e) => {
-            e.channel.onmessage = (ee) => {
-                if (ee.data.arrayBuffer) {
-                    ee.data.arrayBuffer().then((data: Int8Array) => this.net!.incoming.enqueue({data}))
-                }else {
-                    this.net!.incoming.enqueue({data: ee.data})
+            if (e.channel.label === 'write') {
+                e.channel.onmessage = (ee) => {
+                    if (ee.data.arrayBuffer) {
+                        ee.data.arrayBuffer().then((data: Int8Array) => this.net!.incoming.enqueue({data}))
+                    } else {
+                        this.net!.incoming.enqueue({data: ee.data})
+                    }
                 }
             }
             e.channel.onopen = () => {
-                this.channel = e.channel
-                if (this.resolve) {
-                    const r = this.resolve
-                    this.resolve = undefined
-                    r()
+                channelsCount += 1
+                if (e.channel.label === 'read') {
+                    this.channel = e.channel
+                }
+                if (channelsCount === 2) {
+                    if (this.resolve) {
+                        const r = this.resolve
+                        this.resolve = undefined
+                        r()
+                    }
                 }
             }
         }
@@ -80,7 +87,7 @@ export class Xash3DWebRTC extends Xash3D {
         })
     }
 
-    sendtoCallback(packet: Packet){
+    sendtoCallback(packet: Packet) {
         if (!this.channel) return
         this.channel.send(packet.data)
     }
