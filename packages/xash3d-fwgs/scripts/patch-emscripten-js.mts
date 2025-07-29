@@ -32,11 +32,9 @@ async function main() {
     f.deleteAll('preInit();')
     f.deleteAll('run();')
 
-    // fix import paths
-    f.replaceAll('scriptDirectory+path', 'path')
-
-    // replace filenames to custom paths
-    f.replaceAll('filename=PATH.normalize(filename);', 'filename=PATH.normalize(filename);filename=moduleArg?.filesMap?.[filename] ?? filename;')
+    // hack to call dynamic function inside precompiled function
+    f.replaceAll('console.log("sendto")', 'return moduleArg.sendto?.(sockfd, packets, sizes, packet_count, seq_num, to, to_len)')
+    f.replaceAll('console.log("recvfrom")', 'return moduleArg.recvfrom?.(sockfd, buf, len, flags, src_addr, addrlen)')
 
     // return engine funcs instead of runtime promise
     f.replaceAll('return moduleRtn', `
@@ -47,6 +45,7 @@ async function main() {
             HEAP16,
             HEAP8,
             HEAPU8,
+            getValue,
             addFunction,
             removeFunction,
             start: () => {
@@ -55,9 +54,6 @@ async function main() {
             },
         };
     `)
-
-    // customize main wasm path
-    f.replaceAll('"xash.wasm"', 'moduleArg.mainWasmPath')
 
     await f.save()
 }
