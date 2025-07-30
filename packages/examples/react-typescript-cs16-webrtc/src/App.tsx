@@ -17,7 +17,9 @@ const App: FC = () => {
             <button className="Input" onClick={async () => {
                 const x = new Xash3DWebRTC({
                     canvas: canvasRef.current!,
-                    args: ['-windowed', '-game', 'cstrike'],
+                    module: {
+                        arguments: ['-windowed', '-game', 'cstrike'],
+                    },
                     libraries: {
                         filesystem: filesystemURL,
                         xash: xashURL,

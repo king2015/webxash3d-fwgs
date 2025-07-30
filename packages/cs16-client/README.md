@@ -46,7 +46,9 @@ import serverUrl from "cs16-client/dlls/cs_emscripten_wasm32.so"
 
 const x = new Xash3D({
     canvas: document.getElementById('canvas'),
-    args: ['-game', 'cstrike'],
+    module: {
+        arguments: ['-game', 'cstrike'],
+    },
     libraries: {
         menu: menuUrl,
         client: clientUrl,

@@ -8,8 +8,7 @@ export class Xash3DWebRTC extends Xash3D {
 
     constructor(opts?: Xash3DOptions) {
         super(opts);
-        this.net = new Net()
-        this.net.registerSendtoCallback((p) => this.sendtoCallback(p))
+        this.net = new Net(this)
     }
 
     async init() {
@@ -39,10 +38,18 @@ export class Xash3DWebRTC extends Xash3D {
         this.peer.ondatachannel = (e) => {
             if (e.channel.label === 'write') {
                 e.channel.onmessage = (ee) => {
+                    const packet: Packet = {
+                        ip: [127, 0, 0, 1],
+                        port: 8080,
+                        data: ee.data
+                    }
                     if (ee.data.arrayBuffer) {
-                        ee.data.arrayBuffer().then((data: Int8Array) => this.net!.incoming.enqueue({data}))
+                        ee.data.arrayBuffer().then((data: Int8Array) => {
+                            packet.data = data
+                            this.net!.incoming.enqueue(packet)
+                        })
                     } else {
-                        this.net!.incoming.enqueue({data: ee.data})
+                        this.net!.incoming.enqueue(packet)
                     }
                 }
             }
@@ -87,7 +94,7 @@ export class Xash3DWebRTC extends Xash3D {
         })
     }
 
-    sendtoCallback(packet: Packet) {
+    sendto(packet: Packet) {
         if (!this.channel) return
         this.channel.send(packet.data)
     }
