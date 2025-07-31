@@ -6,7 +6,8 @@
   },
   "workspaces": [
     "packages/*",
-    "packages/examples/*"
+    "examples/*",
+    "docker/*"
   ],
   "devDependencies": {
     "@types/node": "^24.0.13",

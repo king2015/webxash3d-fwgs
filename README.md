@@ -58,7 +58,7 @@ steamcmd +force_install_dir ./hl +login your_steam_username +app_update 70 valid
 
 ### Compile and run
 
-To build and run a project, go to the [packages/examples/ folder](packages/examples) and choose the example that matches the game or setup you want.
+To build and run a project, go to the [examples/ folder](examples) and choose the example that matches the game or setup you want.
 
 ### hlsdk
 
