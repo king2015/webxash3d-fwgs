@@ -84,16 +84,16 @@ Replace the placeholders:
 * `<your-public-ip>` — your server's external IP
 * `<your-port>` — open UDP port (e.g. 27018)
 
-Then open http://<your-server-ip>:27016 in your browser!
+Then open `http://<your-server-ip>:27016` in your browser!
 
 ## 🌍 Environment Variables
 
-| Variable               | Description                                                                 | Example                       |
-|------------------------|-----------------------------------------------------------------------------|-------------------------------|
-| `IP`                   | Public IP address for WebRTC connection                                     | `123.45.67.89`                |
-| `PORT`                 | UDP port for CS server (must be open)                                       | `27015`                       |
-| `DISABLE_X_POWERED_BY`| Set to `true` to remove the `X-Powered-By` HTTP header                       | `true`                        |
-| `X_POWERED_BY_VALUE`   | Custom value for `X-Powered-By` header if not disabled                      | `CS 1.6 Web Server`           |
+| Variable               | Description                                                                 | Example             |
+|------------------------|-----------------------------------------------------------------------------|---------------------|
+| `IP`                   | Public IP address for WebRTC connection                                     | `123.45.67.89`      |
+| `PORT`                 | UDP port for CS server (must be open)                                       | `27018`             |
+| `DISABLE_X_POWERED_BY`| Set to `true` to remove the `X-Powered-By` HTTP header                       | `true`              |
+| `X_POWERED_BY_VALUE`   | Custom value for `X-Powered-By` header if not disabled                      | `CS 1.6 Web Server` |
 
 ## 🛠️ Customization
 
