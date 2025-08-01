@@ -32,10 +32,6 @@ async function main() {
     f.deleteAll('preInit();')
     f.deleteAll('run();')
 
-    // hack to call dynamic function inside precompiled function
-    f.replaceAll('console.log("sendto")', 'return moduleArg.sendto?.(sockfd, packets, sizes, packet_count, seq_num, to, to_len)')
-    f.replaceAll('console.log("recvfrom")', 'return moduleArg.recvfrom?.(sockfd, buf, len, flags, src_addr, addrlen)')
-
     // return engine funcs instead of runtime promise
     f.replaceAll('return moduleRtn', `
         return {

@@ -2,6 +2,7 @@
 
 This repository provides a **plug-and-play Docker image** for running a fully functional **Counter-Strike 1.6** client and dedicated server via the web. Powered by **Xash3D FWGS**, **WebRTC**, and modern web tooling, this setup allows for in-browser gameplay and remote multiplayer support.
 
+Repository: [github.com/yohimik/webxash3d-fwgs/docker/cs-web-server](https://github.com/yohimik/webxash3d-fwgs/tree/main/docker/cs-web-server)
 ---
 
 ## 🧱 Features
@@ -77,6 +78,24 @@ docker run -d \
   -v $(pwd)/valve.zip:/xashds/public/valve.zip \
   cs-web-server \
   +map de_dust +maxplayers 14
+```
+
+```yaml
+services:
+  xash3d:
+    image: yohimik/cs-web-server:0.0.0-i386
+    command: ["+map de_dust", "+maxplayers 14"]
+    restart: always
+    platform: linux/386
+    environment:
+      PORT: <your-port>
+      IP: <your-public-ip>
+    volumes:
+      - "./valve.zip:/xashds/public/valve.zip"
+    ports:
+      - "27016:27016"
+      - "<your-port>:<your-port>"
+
 ```
 
 Replace the placeholders:
