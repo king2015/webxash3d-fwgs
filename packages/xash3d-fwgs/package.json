@@ -1,6 +1,6 @@
 {
   "name": "xash3d-fwgs",
-  "version": "1.0.0+commit.eeca965",
+  "version": "1.0.1+commit.eeca965",
   "description": "Xash3D-FWGS emscripten port",
   "homepage": "https://github.com/yohimik/webxash3d-fwgs",
   "main": "dist/index.js",
