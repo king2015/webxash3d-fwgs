@@ -18,14 +18,21 @@ export class MServer {
         this.connections.delete(id)
     }
 
-    fetchServers(params: FetchServersParams) {
+    fetchServers(params: FetchServersParams = {}) {
         const {
             game = 'valve',
             offset = 0,
-            max = 10
+            limit = 10
         } = params
-        const servers = this.servers.get(game) ?? []
-        return servers.slice(offset, offset + max);
+        const allServers = this.servers.get(game) ?? []
+        const servers = allServers.slice(offset, offset + limit)
+
+        return {
+            servers,
+            offset,
+            limit,
+            total: allServers.length,
+        }
     }
 
     stopServer(connectionID: number) {
