@@ -1,5 +1,5 @@
 import {Connection} from "./connection";
-import {FetchServersParams, ServeParams} from "./types";
+import {FetchServersParams, RegisterParams} from "./types";
 import {Server} from "./server";
 
 export class MServer {
@@ -14,7 +14,7 @@ export class MServer {
     }
 
     onClientDisconnect(id: number) {
-        this.stopServer(id)
+        this.unregister(id)
         this.connections.delete(id)
     }
 
@@ -35,7 +35,7 @@ export class MServer {
         }
     }
 
-    stopServer(connectionID: number) {
+    unregister(connectionID: number) {
         const connection = this.connections.get(connectionID)
         if (!connection?.server) return;
 
@@ -53,11 +53,11 @@ export class MServer {
         delete connection.server
     }
 
-    serve(params: ServeParams) {
-        const connection = this.connections.get(params.connectionID)
+    register(id: number, params: RegisterParams) {
+        const connection = this.connections.get(id)
         if (!connection) return
 
-        this.stopServer(params.connectionID)
+        this.unregister(id)
 
         connection.server = new Server(params)
         const servers = this.servers.get(params.game) ?? []

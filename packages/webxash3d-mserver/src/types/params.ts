@@ -10,8 +10,7 @@ export interface ICEServer {
     credential?: string
 }
 
-export interface ServeParams {
-    connectionID: number
+export interface RegisterParams {
     name: string
     game: string
     maxPlayers: number
