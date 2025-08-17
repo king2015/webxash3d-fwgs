@@ -1,6 +1,8 @@
 # Counter-Strike 1.6 Web Server Docker
 
-This repository provides a **plug-and-play Docker image** for running a fully functional **Counter-Strike 1.6** client and dedicated server via the web. Powered by **Xash3D FWGS**, **WebRTC**, and modern web tooling, this setup allows for in-browser gameplay and remote multiplayer support.
+This repository provides a **plug-and-play Docker image** for running a fully functional **Counter-Strike 1.6** client
+and dedicated server via the web. Powered by **Xash3D FWGS**, **WebRTC**, and modern web tooling, this setup allows for
+in-browser gameplay and remote multiplayer support.
 
 Repository: [github.com/yohimik/webxash3d-fwgs/docker/cs-web-server](https://github.com/yohimik/webxash3d-fwgs/tree/main/docker/cs-web-server)
 ---
@@ -29,15 +31,15 @@ Repository: [github.com/yohimik/webxash3d-fwgs/docker/cs-web-server](https://git
 
 ## 🔧 Technologies
 
-### 🖥️ Client (src/client) 
+### 🖥️ Client (src/client)
 
 * Framework: Vite (with HTML + TypeScript)
 * NPM packages:
-  * xash3d-fwgs 
-  * cs16-client
+    * xash3d-fwgs
+    * cs16-client
 * Uses WebRTC to connect to the dedicated server
 
-### 🎮 Server (src/server) 
+### 🎮 Server (src/server)
 
 * Language: Go (Golang) + CGO
 * Embedded: Xash3D FWGS (dedicated server)
@@ -48,7 +50,8 @@ Repository: [github.com/yohimik/webxash3d-fwgs/docker/cs-web-server](https://git
 
 ### 🎮 Game Content (Required)
 
-To run the game, you must provide original **Counter-Strike 1.6 game files** from Steam. These must be packaged in a `valve.zip` file and mounted into the Docker container.
+To run the game, you must provide original **Counter-Strike 1.6 game files** from Steam. These must be packaged in a
+`valve.zip` file and mounted into the Docker container.
 
 ### 📦 `valve.zip` Structure
 
@@ -84,7 +87,7 @@ docker run -d \
 services:
   xash3d:
     image: yohimik/cs-web-server:0.0.0-i386
-    command: ["+map de_dust", "+maxplayers 14"]
+    command: [ "+map de_dust", "+maxplayers 14" ]
     restart: always
     platform: linux/386
     environment:
@@ -107,23 +110,28 @@ Then open `http://<your-server-ip>:27016` in your browser!
 
 ## 🌍 Environment Variables
 
-| Variable               | Description                                                                 | Example             |
-|------------------------|-----------------------------------------------------------------------------|---------------------|
-| `IP`                   | Public IP address for WebRTC connection                                     | `123.45.67.89`      |
-| `PORT`                 | UDP port for CS server (must be open)                                       | `27018`             |
-| `DISABLE_X_POWERED_BY`| Set to `true` to remove the `X-Powered-By` HTTP header                       | `true`              |
-| `X_POWERED_BY_VALUE`   | Custom value for `X-Powered-By` header if not disabled                      | `CS 1.6 Web Server` |
+| Variable               | Description                                            | Example             |
+|------------------------|--------------------------------------------------------|---------------------|
+| `IP`                   | Public IP address for WebRTC connection                | `123.45.67.89`      |
+| `PORT`                 | UDP port for CS server (must be open)                  | `27018`             |
+| `DISABLE_X_POWERED_BY` | Set to `true` to remove the `X-Powered-By` HTTP header | `true`              |
+| `X_POWERED_BY_VALUE`   | Custom value for `X-Powered-By` header if not disabled | `CS 1.6 Web Server` |
 
 ## 🛠️ Customization
 
 * Client UI/UX: Modify files in src/client
 
- 
 To include custom plugins:
-* Mount a volume to /xashds inside the container
+
+* Mount a volume to `/xashds` inside the container
 * Or copy plugin files into the Docker build context
 
 ## 📜 License
 
 This project is licensed under the MIT License.
 See the [LICENSE](./LICENSE.md) file for more information.
+
+## 📝 Changelog
+
+See [CHANGELOG.md](https://github.com/yohimik/webxash3d-fwgs/tree/main/docker/cs-web-server/CHANGELOG.md) for a full
+list of updates and release history.

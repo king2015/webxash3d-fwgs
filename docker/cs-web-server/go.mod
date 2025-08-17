@@ -1,4 +1,4 @@
-module github.com/yohimik/webxash3d-fwgs/packages/docker/cs-web-server
+module github.com/yohimik/webxash3d-fwgs/docker/cs-web-server
 
 go 1.24.4
 

@@ -71,3 +71,7 @@ Need help? Want to share your project or ideas?
 ## 📄 License
 
 MIT License — free for personal and commercial use.
+
+## 📝 Changelog
+
+See [CHANGELOG.md](https://github.com/yohimik/webxash3d-fwgs/tree/main/packages/webxash3d-mserver/CHANGELOG.md) for a full list of updates and release history.

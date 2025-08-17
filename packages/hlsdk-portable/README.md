@@ -58,3 +58,7 @@ x.Cmd_ExecuteString('noclip')
 x.Cmd_ExecuteString('kill')
 x.quit()
 ```
+
+## 📝 Changelog
+
+See [CHANGELOG.md](https://github.com/yohimik/webxash3d-fwgs/tree/main/packages/hlsdk-portable/CHANGELOG.md) for a full list of updates and release history.
