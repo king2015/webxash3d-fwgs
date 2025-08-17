@@ -3,8 +3,10 @@ import websocket from '@fastify/websocket';
 import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
 import pino from 'pino'
+import Ajv from 'ajv';
 import {MServer} from "./mserver";
-import {FetchServersParams} from "./types";
+import {CandidateMessageOutgoing, FetchServersParams, RegisterParams} from "./types";
+import {ROOT_SCHEMA, V1_GET_SERVERS_SCHEMA, WS_MESSAGE_SCHEMA} from "./schemas";
 import packageInfo from '../package.json'
 
 export interface HTTPMServerConfig {
@@ -17,9 +19,16 @@ export interface HTTPMServerConfig {
 export class HTTPMServer extends MServer {
     public readonly fastify: FastifyInstance
     public config: HTTPMServerConfig
+    public ajv: Ajv
+    public wsMessageValidate
+    public wsConnections = new Map<number, WebSocket>
 
     constructor(config: HTTPMServerConfig) {
         super()
+
+        this.ajv = new Ajv()
+
+        this.wsMessageValidate = this.ajv.compile(WS_MESSAGE_SCHEMA);
 
         this.config = config
 
@@ -56,37 +65,52 @@ export class HTTPMServer extends MServer {
         }
 
         this.fastify.register(this.httpRoutes)
-
-
-        const connection = this.onClient()
-        this.serve({
-            name: 'my server',
-            game: 'valve',
-            connectionID: connection.id,
-            map: 'crossfire',
-            maxPlayers: 12,
-            iceServers: [
-                {urls: ['1', '2']}
-            ]
-        })
+        this.fastify.register(this.wsRoutes)
     }
 
+    private wsRoutes: FastifyPluginAsync = async (fastify) => {
+        fastify.get('/ws', {websocket: true}, (connection, req) => {
+            const client = this.onClient()
+            connection.on('message', (message) => {
+                try {
+                    const msg = typeof message === 'string' ? message : message.toString();
+                    const data = JSON.parse(msg)
+                    if (!this.wsMessageValidate(data)) return
+
+                    const [event, payload] = data as [string, unknown]
+                    switch (event) {
+                        case 'v1:server.register':
+                            this.register(client.id, payload as RegisterParams)
+                            break
+                        case 'v1:server.unregister':
+                            this.unregister(client.id)
+                            break
+                        case 'v1:signalling.description':
+                        case 'v1:signalling.candidate':
+                            const dataToSend = payload as CandidateMessageOutgoing
+                            const toClient = this.wsConnections.get(dataToSend.to)
+                            if (toClient) {
+                                dataToSend.from = client.id
+                                toClient.send(JSON.stringify([event, dataToSend]))
+                            }
+                            break
+                    }
+                } catch (e) {
+                    req.log.error(e)
+                }
+            });
+
+            connection.on('close', () => {
+                this.onClientDisconnect(client.id)
+            });
+
+            connection.send(JSON.stringify(['v1:connect', {id: client.id}]))
+        });
+    }
 
     private httpRoutes: FastifyPluginAsync = async (fastify) => {
         fastify.get('/', {
-            schema: {
-                description: 'Returns UNIX timestamp of the server. Can be used as a health check',
-                response: {
-                    200: {
-                        type: 'object',
-                        properties: {
-                            time: {type: 'integer'}
-                        },
-                        required: ['time'],
-                        additionalProperties: false
-                    }
-                }
-            }
+            schema: ROOT_SCHEMA
         }, async () => {
             return {
                 time: Math.floor(Date.now() / 1000)
@@ -94,69 +118,11 @@ export class HTTPMServer extends MServer {
         });
 
         fastify.get('/v1/servers', {
-            schema: {
-                description: 'Fetch paginated list of available servers',
-                querystring: {
-                    type: 'object',
-                    properties: {
-                        offset: {type: 'integer', minimum: 0, default: 0},
-                        limit: {type: 'integer', minimum: 1, maximum: 10, default: 10},
-                        game: {type: 'string', default: 'valve'}
-                    },
-                    additionalProperties: false
-                },
-                response: {
-                    200: {
-                        type: 'object',
-                        properties: {
-                            servers: {
-                                type: 'array',
-                                items: {
-                                    type: 'object',
-                                    properties: {
-                                        name: {type: 'string'},
-                                        address: {type: 'integer'},
-                                        maxPlayers: {type: 'integer'},
-                                        map: {type: 'string'},
-                                        iceServers: {
-                                            type: 'array',
-                                            items: {
-                                                type: 'object',
-                                                properties: {
-                                                    urls: {
-                                                        oneOf: [
-                                                            {type: "string"},
-                                                            {
-                                                                type: "array",
-                                                                items: {type: "string"},
-                                                                minItems: 1
-                                                            }
-                                                        ]
-                                                    },
-                                                    username: {type: 'string'},
-                                                    credential: {type: 'string'},
-                                                },
-                                                required: ['urls'],
-                                                additionalProperties: false
-                                            }
-                                        }
-                                    },
-                                    required: ['name', 'address', 'maxPlayers', 'map'],
-                                    additionalProperties: false
-                                }
-                            },
-                            offset: {type: 'integer'},
-                            limit: {type: 'integer'},
-                            total: {type: 'integer'}
-                        }
-                    }
-                }
-            }
+            schema: V1_GET_SERVERS_SCHEMA
         }, async (request) => {
             return this.fetchServers(request.query as FetchServersParams);
         });
     }
-
 
     async start() {
         await this.fastify.listen({port: this.config.port});

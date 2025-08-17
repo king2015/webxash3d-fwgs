@@ -43,7 +43,7 @@ export class MServer {
         const servers = this.servers.get(game)
         if (!servers) return;
 
-        const newServers = servers.filter(s => s.params.connectionID !== connectionID)
+        const newServers = servers.filter(s => s.connectionID !== connectionID)
         if (newServers.length) {
             this.servers.set(game, newServers)
         } else {
@@ -59,7 +59,7 @@ export class MServer {
 
         this.unregister(id)
 
-        connection.server = new Server(params)
+        connection.server = new Server(id, params)
         const servers = this.servers.get(params.game) ?? []
         servers.push(connection.server)
         this.servers.set(params.game, servers)
