@@ -6,6 +6,7 @@ on:
       - 'cs16-client@*'
       - 'hlsdk-portable@*'
       - 'xash3d-fwgs@*'
+      - 'webxash3d-mserver@*'
 
 jobs:
   publish:
@@ -49,3 +50,14 @@ jobs:
         run: cd packages/${{ steps.parse_tag.outputs.package }} && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "${{ steps.parse_tag.outputs.package }} v${{ steps.parse_tag.outputs.version }}"
+          body: |
+            🔖 **Release for** `${{ steps.parse_tag.outputs.package }}`  
+            📦 **Version:** `${{ steps.parse_tag.outputs.version }}`
+            
+            📄 [Changelog](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/packages/${{ steps.parse_tag.outputs.package }}/CHANGELOG.md)
