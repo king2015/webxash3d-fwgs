@@ -1,6 +1,6 @@
 {
   "name": "webxash3d-mserver",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "WebXash3D MServer",
   "homepage": "https://github.com/yohimik/webxash3d-fwgs",
   "main": "dist/index.js",

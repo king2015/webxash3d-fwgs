@@ -1,4 +1,4 @@
-name: Lerna Package Publish
+name: Build and Publish Package
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
           mkdir -p packages/${{ steps.parse_tag.outputs.package }}/dist
           chmod -R u+w packages/${{ steps.parse_tag.outputs.package }}/dist
 
-      - name: Build Docker image for package
+      - name: Build package
         run: cd packages/${{ steps.parse_tag.outputs.package }} && npm run build
 
       - name: Publish NPM package
