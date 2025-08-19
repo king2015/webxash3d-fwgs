@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS engine
+FROM debian:trixie-slim AS engine
 
 RUN dpkg --add-architecture i386
 
@@ -48,7 +48,7 @@ ENV CGO_LDFLAGS="-fopenmp -m32"
 RUN go build -o ./xash ./src/server
 
 
-FROM debian:bookworm-slim AS hlds
+FROM debian:trixie-slim AS hlds
 
 ARG hlds_build=8308
 ARG hlds_url="https://github.com/DevilBoy-eXe/hlds/releases/download/$hlds_build/hlds_build_$hlds_build.zip"
@@ -99,7 +99,7 @@ COPY src/client src/client
 RUN npm run build
 
 
-FROM debian:bookworm-slim AS final
+FROM debian:trixie-slim AS final
 
 ENV XASH3D_BASEDIR=/xashds
 
