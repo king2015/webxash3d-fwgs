@@ -1,5 +1,6 @@
 services:
   xash3d:
+    image: yohimik/cs-web-server:latest
     build:
       context: .
       tags:
@@ -7,3 +8,11 @@ services:
         - yohimik/cs-web-server:${TAG}
     restart: always
     platform: linux/386
+    environment:
+      PORT: 27018
+      IP: 192.168.50.123
+    volumes:
+      - "./valve.zip:/xashds/public/valve.zip"
+    ports:
+      - "27016:27016"
+      - "27018:27018"
