@@ -6,7 +6,7 @@ on:
       - 'cs-web-server@*'
 
 jobs:
-  publish:
+  buildAndPublish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -36,6 +36,7 @@ jobs:
 
       - name: Push image
         run: |
+          export TAG=${{ steps.parse_tag.outputs.version }}
           cd docker/${{ steps.parse_tag.outputs.package }}
           docker compose push
 
