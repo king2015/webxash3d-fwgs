@@ -6,7 +6,7 @@ on:
       - 'cs-web-server@*'
 
 jobs:
-  buildAndPublish:
+  buildAndPush:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
