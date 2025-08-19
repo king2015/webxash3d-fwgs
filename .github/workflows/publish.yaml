@@ -59,5 +59,6 @@ jobs:
           body: |
             🔖 **Release for** `${{ steps.parse_tag.outputs.package }}`  
             📦 **Version:** `${{ steps.parse_tag.outputs.version }}`
+            🚀 **NPM:** [https://www.npmjs.com/package/${{ steps.parse_tag.outputs.package }}](https://www.npmjs.com/package/${{ steps.parse_tag.outputs.package }}/v/${{ steps.parse_tag.outputs.version }})
             
             📄 [Changelog](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/packages/${{ steps.parse_tag.outputs.package }}/CHANGELOG.md)

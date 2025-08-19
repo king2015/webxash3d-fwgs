@@ -1,0 +1,52 @@
+name: Build and Push Image
+
+on:
+  push:
+    tags:
+      - 'cs-web-server@*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Parse tag to get package and version
+        id: parse_tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "Full tag: $TAG"
+          PACKAGE=${TAG%@*}
+          VERSION=${TAG#*@}
+          echo "package=$PACKAGE" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build image
+        run: |
+          export TAG=${{ steps.parse_tag.outputs.version }}
+          cd docker/${{ steps.parse_tag.outputs.package }}
+          docker compose build
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push image
+        run: |
+          cd docker/${{ steps.parse_tag.outputs.package }}
+          docker compose push
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "${{ steps.parse_tag.outputs.package }} v${{ steps.parse_tag.outputs.version }}"
+          body: |
+            🔖 **Release for** `${{ steps.parse_tag.outputs.package }}`  
+            📦 **Version:** `${{ steps.parse_tag.outputs.version }}`
+            🚀 **Docker:** [https://hub.docker.com/r/yohimik/${{ steps.parse_tag.outputs.package }}](https://hub.docker.com/r/yohimik/${{ steps.parse_tag.outputs.package }})
+            
+            📄 [Changelog](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/docker/${{ steps.parse_tag.outputs.package }}/CHANGELOG.md)
