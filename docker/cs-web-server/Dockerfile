@@ -1,18 +1,29 @@
 FROM debian:bookworm-slim AS engine
 
 RUN dpkg --add-architecture i386
-RUN apt update && apt upgrade -y && apt -y --no-install-recommends install aptitude
-RUN aptitude -y --without-recommends install git ca-certificates build-essential gcc-multilib g++-multilib libbsd-dev:i386 libsdl2-dev:i386 libfreetype-dev:i386 libopus-dev:i386 libbz2-dev:i386 libvorbis-dev:i386 libopusfile-dev:i386 libogg-dev:i386
+
+RUN echo "deb http://deb.debian.org/debian testing main" > /etc/apt/sources.list.d/testing.list
+
+RUN apt update && \
+    apt install -y -t testing gcc-14 g++-14 gcc-14-multilib g++-14-multilib && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
+
+RUN apt install -y --no-install-recommends \
+    git ca-certificates build-essential \
+    gcc-multilib g++-multilib \
+    libbsd-dev:i386 libsdl2-dev:i386 libfreetype-dev:i386 \
+    libopus-dev:i386 libbz2-dev:i386 libvorbis-dev:i386 \
+    libopusfile-dev:i386 libogg-dev:i386
 
 ENV PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 
 WORKDIR /xash
 
-RUN git clone --branch go --single-branch https://github.com/yohimik/xash3d-fwgs .
-RUN git submodule update --init --recursive
+RUN git clone --branch go --single-branch https://github.com/yohimik/xash3d-fwgs . \
+    && git submodule update --init --recursive
 
-RUN ./waf configure -T release -d --enable-lto --enable-openmp \
-    && ./waf build
+RUN ./waf configure -T release -d --enable-lto --enable-openmp && ./waf build
 
 FROM golang:1.24 AS go
 
