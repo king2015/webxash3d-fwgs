@@ -1,6 +1,6 @@
 # Counter-Strike 1.6 Web Server Docker
 
-This repository provides a **plug-and-play Docker image** for running a fully functional **Counter-Strike 1.6** client
+This image provides a **plug-and-play Docker image** for running a fully functional **Counter-Strike 1.6** client
 and dedicated server via the web. Powered by **Xash3D FWGS**, **WebRTC**, and modern web tooling, this setup allows for
 in-browser gameplay and remote multiplayer support.
 
@@ -17,34 +17,6 @@ Repository: [github.com/yohimik/webxash3d-fwgs/docker/cs-web-server](https://git
 - ✅ i386 (32-bit) architecture support
 
 ---
-
-## 📁 Repository Structure
-
-```plaintext
-.
-├── Dockerfile            # Unified Dockerfile for client + server
-├── src/
-│   ├── client/           # HTML + TypeScript + Vite web client
-│   └── server/           # Golang + CGO dedicated server
-└── README.md             # You're here
-```
-
-## 🔧 Technologies
-
-### 🖥️ Client (src/client)
-
-* Framework: Vite (with HTML + TypeScript)
-* NPM packages:
-    * xash3d-fwgs
-    * cs16-client
-* Uses WebRTC to connect to the dedicated server
-
-### 🎮 Server (src/server)
-
-* Language: Go (Golang) + CGO
-* Embedded: Xash3D FWGS (dedicated server)
-* Network: Pion WebRTC library
-* Serves static files for the client frontend
 
 ## 🚀 Getting Started
 
@@ -72,7 +44,6 @@ The `valve.zip` file must contain the following two directories from your Steam 
 You must mount the file to the container path `/xashds/public/valve.zip`:
 
 ```shell
-docker build -t cs-web-server .
 docker run -d \
   -p 27016:27016 \
   -p <your-port>:<your-port>/udp \

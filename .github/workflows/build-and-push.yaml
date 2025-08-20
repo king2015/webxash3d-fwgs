@@ -40,6 +40,19 @@ jobs:
           cd docker/${{ steps.parse_tag.outputs.package }}
           docker compose push
 
+      - name: Upload README to Docker Hub
+        run: |
+          IMAGE_NAME=yohimik/${{ steps.parse_tag.outputs.package }}
+          README_PATH=docker/${{ steps.parse_tag.outputs.package }}/README.docker.md
+          DESCRIPTION=$(cat $README_PATH | jq -Rs .)
+
+          curl -X PATCH https://hub.docker.com/v2/repositories/$IMAGE_NAME/ \
+            -H "Content-Type: application/json" \
+            -H "Authorization: JWT $(curl -s -H "Content-Type: application/json" \
+                -X POST -d '{"username": "${{ secrets.DOCKER_USERNAME }}", "password": "${{ secrets.DOCKER_PASSWORD }}"}' \
+                https://hub.docker.com/v2/users/login/ | jq -r .token)" \
+            -d "{\"full_description\": $DESCRIPTION}"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
