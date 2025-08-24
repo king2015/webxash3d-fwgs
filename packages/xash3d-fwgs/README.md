@@ -19,7 +19,7 @@ This project enables seamless integration of the engine into modern web and cros
 
 ---
 
-## Discord Community
+## 🌐 Discord Community
 
 Need help? Want to share your project or ideas?
 **[Join our Discord community](https://discord.gg/cRNGjWfTDd)** to connect with others!
