@@ -21,7 +21,9 @@ class CompileFile {
 }
 
 async function main() {
-    const raw = await fs.readFile('./dist/raw.js', 'utf8');
+    const raw = (await fs.readFile('./dist/raw.js', 'utf8')).split('var moduleRtn;')
+        .join("var moduleRtn;if(!moduleArg.arguments)moduleArg.arguments=[];if(!moduleArg.arguments.some(a => a.trim() === '-ref'))moduleArg.arguments.push('-ref', 'webgl2');");
+    await fs.writeFile('./dist/raw.js', raw)
     const f = new CompileFile(raw)
 
     // fix CJS export to EJS
@@ -37,6 +39,7 @@ async function main() {
         return {
             Module,
             FS,
+            HEAPU32,
             HEAP32,
             HEAP16,
             HEAP8,
@@ -44,6 +47,15 @@ async function main() {
             getValue,
             addFunction,
             removeFunction,
+            setValue,
+            writeArrayToMemory,
+            intArrayFromString,
+            writeSockaddr,
+            readSockaddr,
+            AsciiToString,
+            _malloc,
+            addRunDependency,
+            removeRunDependency,
             start: () => {
                 preInit();
                 run();

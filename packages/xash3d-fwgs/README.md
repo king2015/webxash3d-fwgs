@@ -40,9 +40,7 @@ import { Xash3D } from "xash3d-fwgs"
 
 const x = new Xash3D({
     canvas: document.getElementById('canvas'),
-    module: {
-        arguments: ['-game', 'cstrike'],
-    }
+    arguments: ['-game', 'cstrike'],
 })
 await x.init()
 x.main()

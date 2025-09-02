@@ -5,8 +5,8 @@ export interface RollingBufferOptions {
 export class RollingBuffer<T> {
     public readonly opts: RollingBufferOptions;
     private readonly buffer: (T | undefined)[];
-    private head: number = 0; // Points to next write position
-    private tail: number = 0; // Points to next read (oldest) position
+    private head: number = 0;
+    private tail: number = 0;
     private count: number = 0;
 
     constructor(opts: RollingBufferOptions) {
@@ -18,10 +18,14 @@ export class RollingBuffer<T> {
         if (this.isFull()) {
             this.tail = (this.tail + 1) % this.opts.maxSize;
         } else {
-            this.count+=1;
+            this.count += 1;
         }
         this.buffer[this.head] = item;
         this.head = (this.head + 1) % this.opts.maxSize;
+    }
+
+    enqueue(item: T): void {
+        this.push(item)
     }
 
     pull(): T | undefined {
@@ -30,17 +34,8 @@ export class RollingBuffer<T> {
         const item = this.buffer[this.tail];
         this.buffer[this.tail] = undefined;
         this.tail = (this.tail + 1) % this.opts.maxSize;
-        this.count-=1;
+        this.count -= 1;
         return item;
-    }
-
-    toArray(): T[] {
-        const res: T[] = new Array(this.size())
-        for (let i = 0; i < this.size(); ++i) {
-            const idx = (this.tail + i) % this.opts.maxSize
-            res[i] = this.buffer[idx]!
-        }
-        return res
     }
 
     size(): number {
@@ -60,5 +55,14 @@ export class RollingBuffer<T> {
         this.head = 0;
         this.tail = 0;
         this.count = 0;
+    }
+
+    toArray(): T[] {
+        const res: T[] = new Array(this.size())
+        for (let i = 0; i < this.size(); ++i) {
+            const idx = (this.tail + i) % this.opts.maxSize
+            res[i] = this.buffer[idx]!
+        }
+        return res
     }
 }
