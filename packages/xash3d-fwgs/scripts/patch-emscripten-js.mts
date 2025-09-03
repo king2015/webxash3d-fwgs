@@ -1,4 +1,4 @@
-import {promises as fs} from 'fs';
+import {promises as fs, existsSync, chmodSync} from 'fs';
 
 class CompileFile {
     private data: string
@@ -20,10 +20,28 @@ class CompileFile {
     }
 }
 
+function ensureWritable(filePath: string) {
+    if (!existsSync(filePath)) {
+        console.error(`❌ File not found: ${filePath}`);
+        process.exit(1);
+    }
+
+    try {
+        chmodSync(filePath, 0o644); // rw-r--r--
+    } catch (err) {
+        console.error(`❌ Failed to chmod ${filePath}`, err);
+        process.exit(1);
+    }
+}
+
+const FILE_PATH = './dist/raw.js'
+
 async function main() {
-    const raw = (await fs.readFile('./dist/raw.js', 'utf8')).split('var moduleRtn;')
+    ensureWritable(FILE_PATH)
+
+    const raw = (await fs.readFile(FILE_PATH, 'utf8')).split('var moduleRtn;')
         .join("var moduleRtn;if(!moduleArg.arguments)moduleArg.arguments=[];if(!moduleArg.arguments.some(a => a.trim() === '-ref'))moduleArg.arguments.push('-ref', 'webgl2');");
-    await fs.writeFile('./dist/raw.js', raw)
+    await fs.writeFile(FILE_PATH, raw)
     const f = new CompileFile(raw)
 
     // fix CJS export to EJS
