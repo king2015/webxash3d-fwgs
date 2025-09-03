@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - gles3compat renderer wasm replaced with gl4es and will be removed in the next major release
 - Extended net module
+- Exported extras.pk3
 - Added engine callbacks
 
 ---

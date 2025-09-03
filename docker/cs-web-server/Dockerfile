@@ -28,14 +28,14 @@ RUN ./waf configure -T release -d --enable-lto --enable-openmp && ./waf build
 FROM golang:1.24 AS go
 
 WORKDIR /go
-COPY go.mod go.mod
-COPY go.sum go.sum
+COPY docker/cs-web-server/go.mod go.mod
+COPY docker/cs-web-server/go.sum go.sum
 RUN go mod download
 RUN mkdir -p ../github.com/yohimik/goxash3d-fwgs
 RUN cp -r $(go list -m -f '{{.Dir}}' github.com/yohimik/goxash3d-fwgs)/* ../github.com/yohimik/goxash3d-fwgs
 RUN echo 'replace github.com/yohimik/goxash3d-fwgs => ../github.com/yohimik/goxash3d-fwgs' >> go.mod
 
-COPY src/server src/server
+COPY docker/cs-web-server/src/server src/server
 COPY --from=engine /xash/build/engine/libxash.a ../github.com/yohimik/goxash3d-fwgs/pkg/libxash.a
 COPY --from=engine /xash/build/public/libbuild_vcs.a ../github.com/yohimik/goxash3d-fwgs/pkg/libbuild_vcs.a
 COPY --from=engine /xash/build/public/libpublic.a ../github.com/yohimik/goxash3d-fwgs/pkg/libpublic.a
@@ -82,19 +82,22 @@ RUN touch /opt/xash/xashds/valve/banned.cfg
 WORKDIR /opt/xash/xashds
 
 # Copy default config
-COPY configs/valve valve
-COPY configs/cstrike cstrike
+COPY docker/cs-web-server/configs/valve valve
+COPY docker/cs-web-server/configs/cstrike cstrike
 
 FROM --platform=linux/amd64 node:22-alpine AS client
 
 WORKDIR /client
 
+COPY docker/cs-web-server/package.json docker/cs-web-server/package.json
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 RUN npm ci
-COPY vite.config.ts vite.config.ts
-COPY tsconfig.json tsconfig.json
-COPY src/client src/client
+COPY docker/cs-web-server/vite.config.ts docker/cs-web-server/vite.config.ts
+COPY docker/cs-web-server/tsconfig.json docker/cs-web-server/tsconfig.json
+COPY docker/cs-web-server/src/client docker/cs-web-server/src/client
+
+WORKDIR /client/docker/cs-web-server
 
 RUN npm run build
 
@@ -119,7 +122,7 @@ ENV LD_LIBRARY_PATH=/xashds
 
 COPY --from=hlds /opt/xash/xashds .
 COPY --from=go /go/xash ./xash
-COPY --from=client /client/src/client/dist ./public
+COPY --from=client /client/docker/cs-web-server/src/client/dist ./public
 COPY --from=engine /xash/build/filesystem/filesystem_stdio.so ./filesystem_stdio.so
 COPY --from=engine "/usr/lib/i386-linux-gnu/libstdc++.so.6" "./libstdc++.so.6"
 COPY --from=engine "/usr/lib/i386-linux-gnu/libgcc_s.so.1" "./libgcc_s.so.1"

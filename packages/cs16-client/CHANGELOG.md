@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed WASM files paths (old will be removed in the next major release)
 - Fixed functions export
 - Exported extras.pk3
+- Exported yapb bots
 
 ---
 
