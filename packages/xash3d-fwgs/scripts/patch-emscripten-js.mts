@@ -1,4 +1,4 @@
-import {promises as fs, existsSync, chmodSync} from 'fs';
+import {promises as fs, existsSync} from 'fs';
 
 class CompileFile {
     private data: string
@@ -20,16 +20,16 @@ class CompileFile {
     }
 }
 
-function ensureWritable(filePath: string) {
+async function ensureWritable(filePath: string) {
     if (!existsSync(filePath)) {
         console.error(`❌ File not found: ${filePath}`);
         process.exit(1);
     }
 
     try {
-        chmodSync(filePath, 0o644); // rw-r--r--
+        await fs.unlink(filePath);
     } catch (err) {
-        console.error(`❌ Failed to chmod ${filePath}`, err);
+        console.error(`❌ File not found: ${filePath}`);
         process.exit(1);
     }
 }
@@ -37,10 +37,11 @@ function ensureWritable(filePath: string) {
 const FILE_PATH = './dist/raw.js'
 
 async function main() {
-    ensureWritable(FILE_PATH)
-
     const raw = (await fs.readFile(FILE_PATH, 'utf8')).split('var moduleRtn;')
         .join("var moduleRtn;if(!moduleArg.arguments)moduleArg.arguments=[];if(!moduleArg.arguments.some(a => a.trim() === '-ref'))moduleArg.arguments.push('-ref', 'webgl2');");
+
+    await ensureWritable(FILE_PATH)
+
     await fs.writeFile(FILE_PATH, raw)
     const f = new CompileFile(raw)
 
