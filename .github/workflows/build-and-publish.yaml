@@ -37,14 +37,25 @@ jobs:
           echo "package=$PACKAGE" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Ensure dist is writable
+      - name: Ensure dist folder and raw.js are writable
         run: |
-          rm -rf packages/${{ steps.parse_tag.outputs.package }}/dist
-          mkdir -p packages/${{ steps.parse_tag.outputs.package }}/dist
-          chmod -R u+w packages/${{ steps.parse_tag.outputs.package }}/dist
-
-      - name: Fix dist file permissions
-        run: chmod -R u+w packages/${{ steps.parse_tag.outputs.package }}/dist
+          DIST_DIR=packages/${{ steps.parse_tag.outputs.package }}/dist
+          RAW_JS="$DIST_DIR/raw.js"
+          
+          # Ensure directory exists
+          mkdir -p "$DIST_DIR"
+          
+          # Fix permissions on dist directory
+          chmod -R u+w "$DIST_DIR"
+          
+          # If raw.js exists, fix its permissions too
+          if [ -f "$RAW_JS" ]; then
+            chmod u+w "$RAW_JS"
+          fi
+          
+          # Optional: log permission info
+          echo "Permissions of $RAW_JS:"
+          ls -l "$RAW_JS" || echo "$RAW_JS not found (yet)"
 
       - name: Build package
         run: cd packages/${{ steps.parse_tag.outputs.package }} && npm run build
