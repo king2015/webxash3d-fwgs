@@ -122,6 +122,6 @@ Text inputs are not rendered as standard HTML input fields, which makes text inp
 Patch the FS module to load only the currently required game files using `fetch`, instead of loading all files into RAM. 
 Requires `EAGAIN` support from the engine.
 
-## WebGL improves (potentially)
+## Gles3compat improves (potentially)
 
 Support GLES3Compat batching and fix `Vertex buffer is not big enough for the draw call.Understand this warning` warning.
