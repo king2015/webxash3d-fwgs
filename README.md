@@ -108,12 +108,12 @@ Need help? Want to share your project or ideas?
 
 Support WebRTC/UDP proxy (webxash3d-mserver).
 
-## Engine Touch Support
+## Engine Touch Support (potentially)
 
 Enable touch support at the engine level.
 Requires `isNeedTouch` engine function support.
 
-## Fix Text Inputs
+## Fix Text Inputs (potentially)
 
 Text inputs are not rendered as standard HTML input fields, which makes text input impossible on mobile devices.
 
