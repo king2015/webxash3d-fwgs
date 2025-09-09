@@ -48,7 +48,7 @@
                 }),
             dynamicLibraries: [
                 "filesystem_stdio.wasm",
-                "libref_gles3compat.wasm",
+                "libref_webgl2.wasm",
                 "cl_dlls/menu_emscripten_wasm32.wasm",
                 "dlls/hl_emscripten_wasm32.so",
                 "cl_dlls/client_emscripten_wasm32.wasm",
@@ -63,6 +63,7 @@
                         this.FS.writeFile(k, files[k]);
                     })
                 this.FS.chdir('/rodir')
+                this.FS.mkdir('/rwdir')
             },
             locateFile: (p) => {
                 switch (p) {
@@ -70,8 +71,8 @@
                         return 'https://cdn.jsdelivr.net/npm/xash3d-fwgs@latest/dist/xash.wasm'
                     case 'filesystem_stdio.wasm':
                         return 'https://cdn.jsdelivr.net/npm/xash3d-fwgs@latest/dist/filesystem_stdio.wasm'
-                    case 'libref_gles3compat.wasm':
-                        return 'https://cdn.jsdelivr.net/npm/xash3d-fwgs@latest/dist/libref_gles3compat.wasm'
+                    case 'libref_webgl2.wasm':
+                        return 'https://cdn.jsdelivr.net/npm/xash3d-fwgs@latest/dist/libref_webgl2.wasm'
                     case 'cl_dlls/menu_emscripten_wasm32.wasm':
                         return 'https://cdn.jsdelivr.net/npm/xash3d-fwgs@latest/dist/cl_dll/menu_emscripten_wasm32.wasm'
                     case 'dlls/hl_emscripten_wasm32.so':
