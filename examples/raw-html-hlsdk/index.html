@@ -39,13 +39,6 @@
         Xash3D({
             arguments: ['-windowed'],
             canvas: document.getElementById('canvas'),
-            ctx: document.getElementById('canvas')
-                .getContext('webgl2', {
-                    alpha: false,
-                    depth: true,
-                    stencil: true,
-                    antialias: true
-                }),
             dynamicLibraries: [
                 "filesystem_stdio.wasm",
                 "libref_webgl2.wasm",
