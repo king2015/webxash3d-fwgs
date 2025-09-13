@@ -13,6 +13,37 @@ const usernamePromise = new Promise<string>(resolve => {
     usernamePromiseResolve = resolve
 })
 
+async function fetchWithProgress(url: string) {
+    const progress = document.getElementById('progress') as HTMLProgressElement
+    const res = await fetch(url);
+
+    const contentLength = res.headers.get('Content-Length');
+
+    const total = contentLength ? parseInt(contentLength, 10) : null;
+    const reader = res.body!.getReader();
+    const chunks = [];
+    let received = 0;
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        chunks.push(value);
+        received += value.length;
+
+        if ( total !== null) {
+            progress.value = received / total
+        } else {
+            progress.value = received
+        }
+    }
+
+    progress.style.opacity = '0'
+
+    const blob = new Blob(chunks);
+    return blob.arrayBuffer()
+}
+
 async function main() {
     const x = new Xash3DWebRTC({
         canvas: document.getElementById('canvas') as HTMLCanvasElement,
@@ -36,8 +67,8 @@ async function main() {
 
     const [zip, extras] = await Promise.all([
         (async () => {
-            const res = await fetch('valve.zip')
-            return await loadAsync(await res.arrayBuffer());
+            const res = await fetchWithProgress('valve.zip')
+            return await loadAsync(res);
         })(),
         (async () => {
             const res = await fetch(extrasURL)
