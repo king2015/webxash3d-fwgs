@@ -10,7 +10,6 @@ import {
     DEFAULT_SOFT_LIBRARY,
     DEFAULT_XASH_LIBRARY
 } from './constants'
-import {RollingBuffer} from "./utils";
 
 /**
  * Rendering library override options.
@@ -71,6 +70,14 @@ export function ErrNoLocation(em?: Em) {
     return em!.getValue(ptr, 'i32');
 }
 
+type WaitLog = {
+    resolve: (log: string) => void
+    reject: (err: Error) => void
+    subLog: string
+    createdAt: number
+    timeoutMs: number
+}
+
 /**
  * High-level wrapper around the Xash3D WebAssembly engine.
  */
@@ -83,8 +90,8 @@ export class Xash3D {
 
     private _exited = false
 
-    /** Rolling buffer to store engine log messages */
-    private messages = new RollingBuffer<string>({maxSize: 100})
+    /** Array of logs to wait */
+    private waitLogs: WaitLog[] = []
 
     /** Active timers used in waitLog */
     private waitTimers = new Set<ReturnType<typeof setInterval>>
@@ -247,15 +254,13 @@ export class Xash3D {
      * @returns The cvar value string or empty if not found
      */
     async getCVar(name: string, timeoutMs = 1000) {
-        const msg = await this.waitLog(`"${name}" is`, timeoutMs)
+        const msg = await this.waitLog(`"${name}" is`, name, timeoutMs)
         const searchStr = `"${name}" is "`;
         const startIndex = msg.indexOf(searchStr);
-
         if (startIndex === -1) return '';
 
         const valueStart = startIndex + searchStr.length;
         const valueEnd = msg.indexOf('"', valueStart);
-
         if (valueEnd === -1) return '';
 
         return msg.slice(valueStart, valueEnd);
@@ -265,28 +270,37 @@ export class Xash3D {
      * Wait for a log message containing the specified substring.
      * Rejects after timeout.
      * @param subLog - Substring to search in logs
+     * @param cmd - Optional command to execute
      * @param timeoutMs - Timeout in milliseconds (default 1000ms)
      * @returns Promise resolving with the log message containing substring
      */
-    waitLog(subLog: string, timeoutMs = 1000) {
+    waitLog(subLog: string, cmd?: string, timeoutMs = 1000) {
         return new Promise<string>((resolve, reject) => {
-            const start = Date.now();
-            // Poll logs repeatedly until substring is found or timeout occurs
-            const id = setInterval(() => {
-                const log = this.messages.toArray().find((log) => log.includes(subLog));
-                if (log) {
-                    this.waitTimers.delete(id)
-                    clearInterval(id);
-                    return resolve(log);
-                }
-                const now = Date.now()
-                if (now - start > timeoutMs) {
-                    this.waitTimers.delete(id)
-                    clearInterval(id);
-                    return reject(new Error('timeout'));
-                }
-            }, 0);
-            this.waitTimers.add(id)
+            this.waitLogs.push({
+                subLog,
+                resolve,
+                reject,
+                timeoutMs,
+                createdAt: Date.now()
+            })
+            if (cmd) {
+                this.Cmd_ExecuteString(cmd)
+            }
+        })
+    }
+
+    private invokeWaitLogs(log: string) {
+        const now = Date.now()
+        this.waitLogs = this.waitLogs.filter(l => {
+            if (log.includes(l.subLog)) {
+                l.resolve(log)
+                return false
+            }
+            if (now - l.createdAt > l.timeoutMs) {
+                l.reject(new Error('timeout'))
+                return false
+            }
+            return true
         })
     }
 
@@ -340,14 +354,12 @@ export class Xash3D {
             locateFile: path => this.locateFile(path),
             arguments: args,
             ...(this.opts.module ?? {}),
-            // Capture stdout logs into rolling buffer and forward to user print
             print: (log: string) => {
-                this.messages.push(log)
+                this.invokeWaitLogs(log)
                 this.opts.module?.print?.(log)
             },
-            // Capture stderr logs into rolling buffer and forward to user printErr
             printErr: (log: string) => {
-                this.messages.push(log)
+                this.invokeWaitLogs(log)
                 this.opts.module?.printErr?.(log)
             },
         })
