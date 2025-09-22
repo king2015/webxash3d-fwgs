@@ -37,8 +37,7 @@ async function ensureWritable(filePath: string) {
 const FILE_PATH = './dist/raw.js'
 
 async function main() {
-    const raw = (await fs.readFile(FILE_PATH, 'utf8')).split('var moduleRtn;')
-        .join("var moduleRtn;if(!moduleArg.arguments)moduleArg.arguments=[];if(!moduleArg.arguments.some(a => a.trim() === '-ref'))moduleArg.arguments.push('-ref', 'webgl2');");
+    const raw = await fs.readFile(FILE_PATH, 'utf8')
 
     await ensureWritable(FILE_PATH)
 
@@ -50,8 +49,8 @@ async function main() {
         'export default Xash3D;')
 
     // add on start async FS callback
-    f.deleteAll('preInit();')
     f.deleteAll('run();')
+    f.deleteAll(';if(runtimeInitialized){moduleRtn=Module}else{moduleRtn=new Promise((resolve,reject)=>{readyPromiseResolve=resolve;readyPromiseReject=reject})}')
 
     // return engine funcs instead of runtime promise
     f.replaceAll('return moduleRtn', `
@@ -76,8 +75,15 @@ async function main() {
             addRunDependency,
             removeRunDependency,
             start: () => {
-                preInit();
                 run();
+                if (runtimeInitialized) {
+                    moduleRtn = Module
+                } else {
+                    moduleRtn = new Promise((resolve, reject) => {
+                        readyPromiseResolve = resolve;
+                        readyPromiseReject = reject
+                    })
+                }
             },
         };
     `)

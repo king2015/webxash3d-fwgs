@@ -10,9 +10,9 @@
     "docker/*"
   ],
   "devDependencies": {
-    "@types/node": "^24.0.13",
+    "@types/node": "^24.5.2",
     "ts-node": "^10.9.2",
-    "lerna": "^8.2.3",
-    "typescript": "^5.8.3"
+    "lerna": "^8.2.4",
+    "typescript": "^5.9.2"
   }
 }
