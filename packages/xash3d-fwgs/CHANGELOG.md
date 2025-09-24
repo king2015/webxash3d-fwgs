@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Duck camera shake
+- Grenade explosion traces
 
 ### Changed
 - Updated emscripten version from `4.0.13` to `4.0.15`
