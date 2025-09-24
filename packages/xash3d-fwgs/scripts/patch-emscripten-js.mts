@@ -20,26 +20,10 @@ class CompileFile {
     }
 }
 
-async function ensureWritable(filePath: string) {
-    if (!existsSync(filePath)) {
-        console.error(`❌ File not found: ${filePath}`);
-        process.exit(1);
-    }
-
-    try {
-        await fs.unlink(filePath);
-    } catch (err) {
-        console.error(`❌ File not found: ${filePath}`);
-        process.exit(1);
-    }
-}
-
 const FILE_PATH = './dist/raw.js'
 
 async function main() {
     const raw = await fs.readFile(FILE_PATH, 'utf8')
-
-    await ensureWritable(FILE_PATH)
 
     await fs.writeFile(FILE_PATH, raw)
     const f = new CompileFile(raw)
