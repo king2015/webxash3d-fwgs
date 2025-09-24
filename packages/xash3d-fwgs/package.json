@@ -6,10 +6,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build:wasm": "docker build --progress=plain -t xash3d-builder . && docker run --rm -v \"$(pwd)/dist:/out\" xash3d-builder",
+    "build:wasm": "docker build --progress=plain -t xash3d-builder . && docker run --rm -u $(id -u):$(id -g) -v \"$(pwd)/dist:/out\" xash3d-builder",
     "build:ts": "node --loader ts-node/esm scripts/patch-emscripten-js.mts && tsc -p tsconfig.build.json",
-    "permissions": "chmod -R u+w ./dist",
-    "build": "npm run clean && npm run build:wasm && npm run permissions && npm run build:ts",
+    "build": "npm run clean && npm run build:wasm && npm run build:ts",
     "clean": "rm -rf ./dist && rm -rf ./lib/generated/xash.js"
   },
   "files": [
