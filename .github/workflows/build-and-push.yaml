@@ -67,4 +67,4 @@ jobs:
         run: |
           export TAG=1.0
           cd docker/cs-web-server
-          docker compose push
+          docker push mrcuya/webxash:1.0
