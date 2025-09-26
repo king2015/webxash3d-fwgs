@@ -49,36 +49,6 @@ ENV PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 WORKDIR /xash
 ENV CC=gcc-14 CXX=g++-14
 
-ARG AMXMODX_VERSION="1.9.0-git5294"
-ARG METAMODR_GIT_REF="4db16ff6"
-
-ARG AMXMODX_FILENAME="amxmodx-$AMXMODX_VERSION-base-linux.tar.gz"
-ARG AMXMODX_SHA256="b9467a63aa92fc22330c06817d9059c4462abc3ecb50d39538dda21c8f27bd58"
-ARG AMXMODX_URL="https://www.amxmodx.org/amxxdrop/1.9/$AMXMODX_FILENAME"
-
-RUN mkdir -p /opt/xash/xashds/cstrike/addons/metamod/dlls \
-    && touch /opt/xash/xashds/cstrike/addons/metamod/plugins.ini
-
-RUN curl -sLO "$AMXMODX_URL" \
-    && echo "$AMXMODX_SHA256  $AMXMODX_FILENAME" | sha256sum -c - \
-    && tar -C /opt/xash/xashds/cstrike/ -zxvf "$AMXMODX_FILENAME" \
-    && echo 'linux addons/amxmodx/dlls/amxmodx_mm_i386.so' >> /opt/xash/xashds/cstrike/addons/metamod/plugins.ini \
-    && rm -f "$AMXMODX_FILENAME"
-
-# Compiling & installing Metamod-R
-RUN git clone --recursive https://github.com/rehlds/Metamod-R.git \
-    && cd Metamod-R \
-    && git checkout $METAMODR_GIT_REF \
-    && cp metamod/extra/config.ini /opt/xash/xashds/cstrike/addons/metamod/config.ini
-
-RUN cd Metamod-R \
-    && mkdir ./build \
-    && cd build \
-    && cmake .. \
-            -DCMAKE_BUILD_TYPE=COMPAT_GLIBC \
-    && cmake --build . --parallel $(nproc)
-
-RUN cd Metamod-R/build && cp metamod/metamod_i386.so /opt/xash/xashds/cstrike/addons/metamod/dlls/metamod.so
 
 FROM golang:1.24 AS go
 
@@ -180,10 +150,7 @@ COPY --from=engine /xash/build/filesystem/filesystem_stdio.so ./filesystem_stdio
 COPY --from=engine "/usr/lib/i386-linux-gnu/libstdc++.so.6" "./libstdc++.so.6"
 COPY --from=engine "/usr/lib/i386-linux-gnu/libgcc_s.so.1" "./libgcc_s.so.1"
 COPY --from=addons "/opt/xash/xashds/cstrike" cstrike
-RUN sed -i 's/dlls\/cs\.so/addons\/metamod\/dlls\/metamod.so/g' ./cstrike/liblist.gam
 RUN cat cstrike/mapcycle.txt >> cstrike/addons/amxmodx/configs/maps.ini
-# disabled amxmodx for test
-RUN : > cstrike/addons/metamod/plugins.ini
 
 RUN groupadd xashds && useradd -m -g xashds xashds
 USER xashds
