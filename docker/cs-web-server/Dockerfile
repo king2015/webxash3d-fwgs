@@ -99,7 +99,7 @@ COPY docker/cs-web-server/src/client docker/cs-web-server/src/client
 
 WORKDIR /client/docker/cs-web-server
 
-RUN npm run build
+#RUN npm run build
 
 
 FROM debian:trixie-slim AS final
@@ -122,7 +122,7 @@ ENV LD_LIBRARY_PATH=/xashds
 
 COPY --from=hlds /opt/xash/xashds .
 COPY --from=go /go/xash ./xash
-COPY --from=client /client/docker/cs-web-server/src/client/dist ./public
+#COPY --from=client /client/docker/cs-web-server/src/client/dist ./public
 COPY --from=engine /xash/build/filesystem/filesystem_stdio.so ./filesystem_stdio.so
 COPY --from=engine "/usr/lib/i386-linux-gnu/libstdc++.so.6" "./libstdc++.so.6"
 COPY --from=engine "/usr/lib/i386-linux-gnu/libgcc_s.so.1" "./libgcc_s.so.1"
