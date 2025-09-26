@@ -67,4 +67,5 @@ jobs:
         run: |
           export TAG=1.0
           cd docker/cs-web-server
+          docker images
           docker push docker.io/mrcuya/webxash:${TAG}
