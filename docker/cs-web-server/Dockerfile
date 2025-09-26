@@ -32,6 +32,7 @@ COPY docker/cs-web-server/go.mod go.mod
 COPY docker/cs-web-server/go.sum go.sum
 RUN go mod download
 RUN mkdir -p ../github.com/yohimik/goxash3d-fwgs
+RUN echo "Module directory: $(go list -m -f '{{.Dir}}' github.com/yohimik/goxash3d-fwgs)"
 RUN cp -r $(go list -m -f '{{.Dir}}' github.com/yohimik/goxash3d-fwgs)/* ../github.com/yohimik/goxash3d-fwgs
 RUN echo 'replace github.com/yohimik/goxash3d-fwgs => ../github.com/yohimik/goxash3d-fwgs' >> go.mod
 
