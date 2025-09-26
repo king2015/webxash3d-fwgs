@@ -10,7 +10,7 @@ require (
 	github.com/pion/rtcp v1.2.15
 	github.com/pion/rtp v1.8.21
 	github.com/pion/webrtc/v4 v4.1.3
-	github.com/yohimik/goxash3d-fwgs v0.0.0-20250730003640-90b4aa816099
+	github.com/yohimik/goxash3d-fwgs v0.0.0-20250925162442-1efef1b6a88b
 )
 
 require (
