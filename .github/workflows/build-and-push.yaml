@@ -1,6 +1,7 @@
 name: Build and Push Image
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'cs-web-server@*'
@@ -79,8 +80,8 @@ jobs:
 
       - name: Upload README to Docker Hub
         run: |
-          IMAGE_NAME=yohimik/${{ needs.setup.outputs.image }}
-          README_PATH=docker/${{ needs.setup.outputs.image }}/README.docker.md
+          IMAGE_NAME=mrcuya/webxash
+          README_PATH=docker/webxash}/README.docker.md
           DESCRIPTION=$(cat $README_PATH | jq -Rs .)
 
           curl -X PATCH https://hub.docker.com/v2/repositories/$IMAGE_NAME/ \
@@ -89,19 +90,3 @@ jobs:
               -X POST -d '{"username": "${{ secrets.DOCKER_USERNAME }}", "password": "${{ secrets.DOCKER_PASSWORD }}"}' \
               https://hub.docker.com/v2/users/login/ | jq -r .token)" \
             -d "{\"full_description\": $DESCRIPTION}"
-
-  release:
-    runs-on: ubuntu-latest
-    needs: [setup, build, push]
-    steps:
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: "${{ needs.setup.outputs.image }} v${{ needs.setup.outputs.version }}"
-          body: |
-            🔖 **Release for** `${{ needs.setup.outputs.image }}`
-            📦 **Version:** `${{ needs.setup.outputs.version }}`
-            🚀 **Docker:** [https://hub.docker.com/r/yohimik/${{ needs.setup.outputs.image }}](https://hub.docker.com/r/yohimik/${{ needs.setup.outputs.image }})
-
-            📄 [Changelog](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/docker/${{ needs.setup.outputs.image }}/CHANGELOG.md)
