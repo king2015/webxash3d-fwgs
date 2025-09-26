@@ -30,6 +30,7 @@ FROM golang:1.24 AS go
 WORKDIR /go
 COPY docker/cs-web-server/go.mod go.mod
 COPY docker/cs-web-server/go.sum go.sum
+RUN go get github.com/yohimik/goxash3d-fwgs@main
 RUN go mod download
 RUN mkdir -p ../github.com/yohimik/goxash3d-fwgs
 RUN echo "Module directory: $(go list -m -f '{{.Dir}}' github.com/yohimik/goxash3d-fwgs)"
