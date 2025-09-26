@@ -1,12 +1,12 @@
 services:
   xash3d:
-    image: mrcuya/cs-web-server:latest
+    image: mrcuya/webxash:latest
     build:
       context: ../../
       dockerfile: ./docker/cs-web-server/Dockerfile
       tags:
-        - mrcuya/cs-web-server:latest
-        - mrcuya/cs-web-server:${TAG}
+        - mrcuya/webxash:latest
+        - mrcuya/webxash:${TAG}
     restart: always
     platform: linux/386
     environment:
