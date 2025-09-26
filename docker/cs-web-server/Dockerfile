@@ -19,11 +19,66 @@ RUN apt install -y --no-install-recommends \
 ENV PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 
 WORKDIR /xash
+ENV CC=gcc-14 CXX=g++-14
 
 RUN git clone --branch go --single-branch https://github.com/yohimik/xash3d-fwgs . \
     && git submodule update --init --recursive
 
 RUN ./waf configure -T release -d --enable-lto --enable-openmp && ./waf build
+
+FROM debian:trixie-slim AS addons
+
+RUN dpkg --add-architecture i386
+
+RUN echo "deb http://deb.debian.org/debian testing main" > /etc/apt/sources.list.d/testing.list
+
+RUN apt update && \
+    apt install -y -t testing gcc-14 g++-14 gcc-14-multilib g++-14-multilib && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
+
+RUN apt install -y --no-install-recommends \
+    git ca-certificates build-essential cmake curl \
+    gcc-multilib g++-multilib \
+    libbsd-dev:i386 libsdl2-dev:i386 libfreetype-dev:i386 \
+    libopus-dev:i386 libbz2-dev:i386 libvorbis-dev:i386 \
+    libopusfile-dev:i386 libogg-dev:i386
+
+ENV PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
+
+WORKDIR /xash
+ENV CC=gcc-14 CXX=g++-14
+
+ARG AMXMODX_VERSION="1.9.0-git5294"
+ARG METAMODR_GIT_REF="4db16ff6"
+
+ARG AMXMODX_FILENAME="amxmodx-$AMXMODX_VERSION-base-linux.tar.gz"
+ARG AMXMODX_SHA256="b9467a63aa92fc22330c06817d9059c4462abc3ecb50d39538dda21c8f27bd58"
+ARG AMXMODX_URL="https://www.amxmodx.org/amxxdrop/1.9/$AMXMODX_FILENAME"
+
+RUN mkdir -p /opt/xash/xashds/cstrike/addons/metamod/dlls \
+    && touch /opt/xash/xashds/cstrike/addons/metamod/plugins.ini
+
+RUN curl -sLO "$AMXMODX_URL" \
+    && echo "$AMXMODX_SHA256  $AMXMODX_FILENAME" | sha256sum -c - \
+    && tar -C /opt/xash/xashds/cstrike/ -zxvf "$AMXMODX_FILENAME" \
+    && echo 'linux addons/amxmodx/dlls/amxmodx_mm_i386.so' >> /opt/xash/xashds/cstrike/addons/metamod/plugins.ini \
+    && rm -f "$AMXMODX_FILENAME"
+
+# Compiling & installing Metamod-R
+RUN git clone --recursive https://github.com/rehlds/Metamod-R.git \
+    && cd Metamod-R \
+    && git checkout $METAMODR_GIT_REF \
+    && cp metamod/extra/config.ini /opt/xash/xashds/cstrike/addons/metamod/config.ini
+
+RUN cd Metamod-R \
+    && mkdir ./build \
+    && cd build \
+    && cmake .. \
+            -DCMAKE_BUILD_TYPE=COMPAT_GLIBC \
+    && cmake --build . --parallel $(nproc)
+
+RUN cd Metamod-R/build && cp metamod/metamod_i386.so /opt/xash/xashds/cstrike/addons/metamod/dlls/metamod.so
 
 FROM golang:1.24 AS go
 
@@ -33,7 +88,6 @@ COPY docker/cs-web-server/go.sum go.sum
 RUN go get github.com/yohimik/goxash3d-fwgs@main
 RUN go mod download
 RUN mkdir -p ../github.com/yohimik/goxash3d-fwgs
-RUN echo "Module directory: $(go list -m -f '{{.Dir}}' github.com/yohimik/goxash3d-fwgs)"
 RUN cp -r $(go list -m -f '{{.Dir}}' github.com/yohimik/goxash3d-fwgs)/* ../github.com/yohimik/goxash3d-fwgs
 RUN echo 'replace github.com/yohimik/goxash3d-fwgs => ../github.com/yohimik/goxash3d-fwgs' >> go.mod
 
@@ -42,7 +96,7 @@ COPY --from=engine /xash/build/engine/libxash.a ../github.com/yohimik/goxash3d-f
 COPY --from=engine /xash/build/public/libbuild_vcs.a ../github.com/yohimik/goxash3d-fwgs/pkg/libbuild_vcs.a
 COPY --from=engine /xash/build/public/libpublic.a ../github.com/yohimik/goxash3d-fwgs/pkg/libpublic.a
 COPY --from=engine /xash/build/3rdparty/libbacktrace/libbacktrace.a ../github.com/yohimik/goxash3d-fwgs/pkg/libbacktrace.a
-
+RUN cat /github.com/yohimik/goxash3d-fwgs/pkg/net.go
 ENV GOARCH=386
 ENV CC="gcc -m32 -D__i386__"
 ENV CGO_CFLAGS="-fopenmp -m32"
@@ -117,10 +171,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     openssl \
     && apt-get clean
 
-RUN groupadd xashds && useradd -m -g xashds xashds
-USER xashds
 WORKDIR /xashds
-ENV LD_LIBRARY_PATH=/xashds
 
 COPY --from=hlds /opt/xash/xashds .
 COPY --from=go /go/xash ./xash
@@ -128,6 +179,16 @@ COPY --from=go /go/xash ./xash
 COPY --from=engine /xash/build/filesystem/filesystem_stdio.so ./filesystem_stdio.so
 COPY --from=engine "/usr/lib/i386-linux-gnu/libstdc++.so.6" "./libstdc++.so.6"
 COPY --from=engine "/usr/lib/i386-linux-gnu/libgcc_s.so.1" "./libgcc_s.so.1"
+COPY --from=addons "/opt/xash/xashds/cstrike" cstrike
+RUN sed -i 's/dlls\/cs\.so/addons\/metamod\/dlls\/metamod.so/g' ./cstrike/liblist.gam
+RUN cat cstrike/mapcycle.txt >> cstrike/addons/amxmodx/configs/maps.ini
+# disabled amxmodx for test
+RUN : > cstrike/addons/metamod/plugins.ini
+
+RUN groupadd xashds && useradd -m -g xashds xashds
+USER xashds
+WORKDIR /xashds
+ENV LD_LIBRARY_PATH=/xashds
 EXPOSE 27015/udp
 
 # Start server
