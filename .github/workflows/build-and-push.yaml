@@ -10,8 +10,8 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ steps.parse_tag.outputs.image }}
-      version: ${{ steps.parse_tag.outputs.version }}
+      image: cs-web-server
+      version: 1.0
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -47,8 +47,8 @@ jobs:
 
       - name: Build image
         run: |
-          export TAG=${{ needs.setup.outputs.version }}
-          cd docker/${{ needs.setup.outputs.image }}
+          export TAG=1.0
+          cd docker/cs-web-server
           docker compose build
 
   push:
@@ -65,8 +65,8 @@ jobs:
 
       - name: Push image
         run: |
-          export TAG=${{ needs.setup.outputs.version }}
-          cd docker/${{ needs.setup.outputs.image }}
+          export TAG=1.0
+          cd docker/cs-web-server
           docker compose push
 
   readme:
