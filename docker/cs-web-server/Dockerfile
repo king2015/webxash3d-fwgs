@@ -149,8 +149,8 @@ COPY --from=go /go/xash ./xash
 COPY --from=engine /xash/build/filesystem/filesystem_stdio.so ./filesystem_stdio.so
 COPY --from=engine "/usr/lib/i386-linux-gnu/libstdc++.so.6" "./libstdc++.so.6"
 COPY --from=engine "/usr/lib/i386-linux-gnu/libgcc_s.so.1" "./libgcc_s.so.1"
-COPY --from=addons "/opt/xash/xashds/cstrike" cstrike
-RUN cat cstrike/mapcycle.txt >> cstrike/addons/amxmodx/configs/maps.ini
+#COPY --from=addons "/opt/xash/xashds/cstrike" cstrike
+#RUN cat cstrike/mapcycle.txt >> cstrike/addons/amxmodx/configs/maps.ini
 
 RUN groupadd xashds && useradd -m -g xashds xashds
 USER xashds
