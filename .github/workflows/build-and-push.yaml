@@ -10,8 +10,8 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      image: cs-web-server
-      version: 1.0
+      image: ${{ steps.parse_tag.outputs.image }}
+      version: ${{ steps.parse_tag.outputs.version }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -22,7 +22,7 @@ jobs:
       - name: Parse tag to get image and version
         id: parse_tag
         run: |
-          TAG=${GITHUB_REF#refs/tags/}
+          TAG='cs-web-server@2.0'
           echo "Full tag: $TAG"
           IMAGE=${TAG%@*}
           VERSION=${TAG#*@}
@@ -47,8 +47,8 @@ jobs:
 
       - name: Build image
         run: |
-          export TAG=1.0
-          cd docker/cs-web-server
+          export TAG=${{ needs.setup.outputs.version }}
+          cd docker/${{ needs.setup.outputs.image }}
           docker compose build
 
   push:
@@ -65,7 +65,6 @@ jobs:
 
       - name: Push image
         run: |
-          export TAG=1.0
-          cd docker/cs-web-server
-          docker images
-          docker push docker.io/mrcuya/webxash:${TAG}
+          export TAG=${{ needs.setup.outputs.version }}
+          cd docker/${{ needs.setup.outputs.image }}
+          docker compose push
